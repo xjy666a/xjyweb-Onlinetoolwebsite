@@ -1,0 +1,63 @@
+<!DOCTYPE html>  
+<html lang="zh">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <title>本书制作者名单</title>  
+    <style>  
+        body {  
+            background-color: #FF8C00; /* 橙色背景 */  
+            background-image: url('background.jpg'); /* 背景图片 */  
+            background-size: cover; /* 背景图片充满整个页面 */  
+            background-repeat: no-repeat; /* 不重复显示背景图片 */  
+            font-family: Arial, sans-serif; /* 字体 */  
+        }  
+        h1 {  
+            color: #FFFFFF; /* 标题颜色为白色 */  
+            text-align: center; /* 居中显示标题 */  
+            padding: 20px 0; /* 上下填充为20px */  
+        }  
+        p {  
+            color: #555555; /* 正文颜色为深灰色 */  
+            text-align: justify; /* 正文两端对齐 */  
+            padding: 10px; /* 内边距为10px */  
+        }  
+        button {  
+            display: block; /* 让按钮独占一行 */  
+            margin: 20px auto; /* 水平居中按钮 */  
+            padding: 10px 20px; /* 内边距为10px，左右内边距为20px */  
+            background-color: #FF8C00; /* 橙色背景 */  
+            color: #FFFFFF; /* 文字颜色为白色 */  
+            border: none; /* 无边框 */  
+            cursor: pointer; /* 鼠标悬停时显示手形光标 */  
+        }  
+        button:hover {  
+            background-color: #FFA035; /* 鼠标悬停时改变背景颜色为橙黄色 */  
+        }  
+    </style>  
+</head>  
+<body>  
+    <h1>本书制作者名单</h1>  
+    <p>感谢所有参与本书制作的人员，以下是他们的名单：</p>  
+    <ul>  
+        <li>策划：MG</li>  
+        <li>设计：MG</li>  
+        <li>文字编辑：MG</li>  
+        <li>美术编辑：AI生成和MG</li>  
+        <li>使用软件：AcrobatProPortable</li>  
+    </ul>  
+    <p id="counter">点赞次数：0</p>  
+    <button onclick="incrementCounter()">点赞</button>  
+    <script>  
+        var counter = 0; // 计数器初始值为0  
+        var colors = ["#FF8C00", "#FFA035", "#FFB035"]; // 可切换的背景颜色列表，这里选择橙色、橙黄色和白色。  
+        var currentColorIndex = 0; // 当前背景颜色的索引，初始值为0，即橙色。  
+        function incrementCounter() { // 点击按钮后增加计数器值并显示在页面上，同时切换背景颜色。  
+            counter++; // 计数器加一  
+            document.getElementById("counter").innerHTML = "点击次数：" + counter; // 更新显示的值，同时切换背景颜色。  
+            currentColorIndex = (currentColorIndex + 1) % colors.length; // 计算下一个背景颜色的索引，如果超过颜色列表长度则回到第一个颜色。  
+            document.body.style.backgroundColor = colors[currentColorIndex]; // 设置新的背景颜色。这里使用了CSS的透明度属性，使背景颜色变化更加平滑。  
+        }  
+    </script>  
+</body>  
+</html>
