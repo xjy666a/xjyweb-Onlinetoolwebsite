@@ -68,7 +68,7 @@
            score++;
            scoreElement.innerText = score;
            removeButton();
-           let nextButtonSpeed = Math.min(buttonSpeed + 0.05, 3);
+           let nextButtonSpeed = Math.min(buttonSpeed + 0.05, 10);
            buttonElement = createButton();
            buttonElement.classList.add('button');
            buttonElement.style.animationDuration = nextButtonSpeed + 's';
