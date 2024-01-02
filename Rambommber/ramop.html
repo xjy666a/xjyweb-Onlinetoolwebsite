@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自定义随机数生成器</title>
+<style>
+body {
+ font-family: Arial, sans-serif;
+}
+.container {
+ max-width: 600px;
+ margin: 0 auto;
+ padding: 20px;
+}
+input[type="number"] {
+ width: 100%;
+ padding: 10px;
+ margin-bottom: 10px;
+ type: integer;
+}
+button {
+ width: 100%;
+ padding: 10px;
+ margin-bottom: 10px;
+ background-color: #4CAF50;
+ color: white;
+ font-size: 16px;
+ cursor: pointer;
+}
+button:hover {
+ background-color: #45a049;
+}
+.result {
+ margin-top: 10px;
+ font-size: 18px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>自定义随机数生成器（七班定制版）</h1>
+<input type="number" id="min" placeholder="取随机数的最小值">
+<input type="number" id="max" placeholder="取随机数的最大值">
+<input type="number" id="minNot" placeholder="不取值的最小值（不填默认没有）（不取值的范围必须在随机数范围以内）">
+<input type="number" id="maxNot" placeholder="不取值的最大值（不填默认没有）（不取值的范围必须在随机数范围以内）">
+<button onclick="generateRandomNumber()">生成随机数</button>
+<div class="result" id="result"></div>
+</div>
+<script>
+function generateRandomNumber() {
+ const min = parseInt(document.getElementById('min').value) - 1;
+ const max = parseInt(document.getElementById('max').value) - 1;
+ const minNot = parseInt(document.getElementById('minNot').value) - 1;
+ const maxNot = parseInt(document.getElementById('maxNot').value) - 1;
+
+ if (min > max) {
+     alert('最小值不能大于最大值！');
+     return;
+ }
+
+ if (minNot < min || minNot > max || maxNot < min || maxNot > max) {
+     alert('不取值的范围必须在随机数范围以内！');
+     return;
+ }
+
+ let randomNumber;
+ do {
+     randomNumber = Math.floor(Math.random() * (max - min + 1) + min);
+ } while (randomNumber >= minNot && randomNumber <= maxNot);
+
+ if (randomNumber >= minNot && randomNumber <= maxNot) {
+     generateRandomNumber();
+ } else {
+     document.getElementById('result').innerText = `随机数：${randomNumber + 1}`;
+ }
+}
+</script>
+</body>
+</html>
