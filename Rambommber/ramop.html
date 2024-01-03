@@ -1,44 +1,80 @@
-<!DOCTYPE html>  
-<html>  
-<head>  
-  <title>答案网</title>  
-  <style>
-    a.button {
-      background-color: #4CAF50; /* 按钮颜色 */
-      color: white; /* 按钮文本颜色 */
-      padding: 10px 20px; /* 按钮内边距 */
-      border: none; /* 移除边框 */
-      border-radius: 4px; /* 圆角 */
-      text-decoration: none; /* 去除下划线 */
-      display: inline-block; /* 使文本成为块级元素 */
-      font-size: 16px; /* 字体大小 */
-    }
-    a.button:hover {
-      background-color: #45a049; /* 鼠标悬停时的背景颜色 */
-    }
-   </style>   
-</head>  
-<body id="ihpg" style="background-image: url('1.jpg'); background-size: cover; background-position: center;">  
-  <div class="text-container">  
-    <div id="ih2v" title="和嗯咯" style="color: orange; font-size: 35px; padding: 20px 0;">你被骗了，实际上这里没有答案</div>  
-    <p id="i2s9" class="c3934" style="color: orange; padding: 10px 0;">  
-      <span id="i7toq" class="c5702" style="color: orange;">防范电信诈骗十四句口诀：</span>  
-    </p>  
-    <p id="ikxy" class="c4836" style="color: orange; padding: 10px 0;">陌生电话要警惕， 可疑短信需注意。</p>  
-    <p id="i7jpi" class="c4854" style="color: orange; padding: 10px 0;">中奖退税送便宜， 哄你汇钱是目的。</p>  
-    <p id="ijbbn" class="c4872" style="color: orange; padding: 10px 0;">暴利理财和投资， 多是骗局莫搭理。</p>  
-    <p id="igqp4" class="c4890" style="color: orange; padding: 10px 0;">刷卡消费欠话费， 细分真伪辨猫腻。</p>  
-    <p id="isd0k" class="c4908" style="color: orange; padding: 10px 0;">冒充领导公检法， 提防骗子在演戏。</p>  
-    <p id="itzom" class="c4926" style="color: orange; padding: 10px 0;">安全账户不安全， 资金转账要警惕。</p>  
-    <p id="ifa8k" class="c4944" style="color: orange; padding: 10px 0;">来电自称黑社会， 立刻报警不迟疑。</p>  
-    <p id="i5jrj" class="c4962" style="color: orange; padding: 10px 0;">亲朋好友遇事急， 不忙汇款先联系。</p>  
-    <p id="i00xk" class="c4980" style="color: orange; padding: 10px 0;">网银升级假信息， 钓鱼网站莫点击。</p>  
-    <p id="iu0u7" class="c4998" style="color: orange; padding: 10px 0;">电子银行本人办， U盾自己拿手里。</p>  
-    <p id="ic3p6" class="c5016" style="color: orange; padding: 10px 0;">个人信息要保密， 密码账号管仔细。</p>  
-    <p id="in1y1" class="c5034" style="color: orange; padding: 10px 0;">不理不信不汇款， 小心谨慎防万一。</p>  
-    <p id="iboig" class="c5052" style="color: orange; padding: 10px 0;">任凭骗术千万变， 我自心中有主意。</p>  
-    <p id="if25n" class="c5070" style="color: orange; padding: 10px 0;">辨别假真也不难， 110咨询最放心！</p> 
-    <a href="https://jiyan.lanzouw.com/b013xzpng?" target="_blank">点击跳转至源码和其他文件下载网站(密码mg45)</a></p>
-     <a href=114514.html target="_blank" class="button">点击跳转至七班历史（七年级第一册）（七上）制作者名单</a></p>
-     <a href=mggamedh.html target="_blank" class="button">点击跳转至mg小游戏导航页</a></p>
-     <a href=2024wh.htm target="_blank" class="button">点击跳转至2024发生的事</a></p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>自定义随机数生成器</title>
+<style>
+body {
+ font-family: Arial, sans-serif;
+}
+.container {
+ max-width: 600px;
+ margin: 0 auto;
+ padding: 20px;
+}
+input[type="number"] {
+ width: 100%;
+ padding: 10px;
+ margin-bottom: 10px;
+ type: integer;
+}
+button {
+ width: 100%;
+ padding: 10px;
+ margin-bottom: 10px;
+ background-color: #4CAF50;
+ color: white;
+ font-size: 16px;
+ cursor: pointer;
+}
+button:hover {
+ background-color: #45a049;
+}
+.result {
+ margin-top: 10px;
+ font-size: 18px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>自定义随机数生成器（七班定制版）</h1>
+<input type="number" id="min" placeholder="取随机数的最小值">
+<input type="number" id="max" placeholder="取随机数的最大值">
+<input type="number" id="minNot" placeholder="不取值的最小值（不填默认没有）（不取值的范围必须在随机数范围以内）">
+<input type="number" id="maxNot" placeholder="不取值的最大值（不填默认没有）（不取值的范围必须在随机数范围以内）">
+<button onclick="generateRandomNumber()">生成随机数</button>
+<div class="result" id="result"></div>
+</div>
+<script>
+function generateRandomNumber() {
+ const min = parseInt(document.getElementById('min').value) - 1;
+ const max = parseInt(document.getElementById('max').value) - 1;
+ const minNot = parseInt(document.getElementById('minNot').value) - 1;
+ const maxNot = parseInt(document.getElementById('maxNot').value) - 1;
+
+ if (min > max) {
+     alert('最小值不能大于最大值！');
+     return;
+ }
+
+ if (minNot < min || minNot > max || maxNot < min || maxNot > max) {
+     alert('不取值的范围必须在随机数范围以内！');
+     return;
+ }
+
+ let randomNumber;
+ do {
+     randomNumber = Math.floor(Math.random() * (max - min + 1) + min);
+ } while (randomNumber >= minNot && randomNumber <= maxNot);
+
+ if (randomNumber >= minNot && randomNumber <= maxNot) {
+     generateRandomNumber();
+ } else {
+     document.getElementById('result').innerText = `随机数：${randomNumber + 1}`;
+ }
+}
+</script>
+</body>
+</html>
