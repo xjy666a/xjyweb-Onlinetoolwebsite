@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>随机数生成器</title>
+  <style>
+    input[type="number"] {
+      width: 200px;
+      height: 40px;
+      border-radius: 10px;
+      font-size: 18px;
+      padding: 10px 20px;
+      border: 2px solid #ccc;
+        border-radius: 10px;
+    }
+    button {
+      background-color: #00FF00;
+      border: none;
+      color: white;
+      cursor: pointer;
+      padding: 5px 10px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 18px;
+      margin: 4px 2px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #00CC00;
+    }
+  </style>
+</head>
+<body>
+  <h1>随机数生成器</h1>
+  <p>请输入随机数的范围：</p>
+  <input type="number" id="min" min="0" step="1" placeholder="最小值">
+  <span>到</span>
+  <input type="number" id="max" min="0" step="1" placeholder="最大值">
+  <p>请输入不取的值的范围：</p>
+  <input type="number" id="exclude_min" min="0" step="1" placeholder="不取的最小值">
+  <span>和</span>
+  <input type="number" id="exclude_max" min="0" step="1" placeholder="不取的最大值">
+  <p>历史随机数：</p>
+  <textarea id="history" rows="10" cols="30" placeholder="在此输入历史随机数"></textarea>
+  <p>生成随机数：</p>
+  <button onclick="generateRandomNumber()">生成</button>
+  <p>清除历史记录：</p>
+  <button onclick="clearHistory()">清除</button>
+  <button onclick="showSum()">计算和</button>
+  <p id="sum_result"></p>
+
+  <script>
+    let previousRandomNumbers = [];
+
+    function generateRandomNumber() {
+      const min = parseInt(document.getElementById("min").value);
+      const max = parseInt(document.getElementById("max").value);
+      const excludeMin = parseInt(document.getElementById("exclude_min").value);
+      const excludeMax = parseInt(document.getElementById("exclude_max").value);
+
+      if (excludeMin > excludeMax) {
+        alert("不取的最小值必须小于不取的最大值。");
+        return;
+      }
+
+      let randomNumber;
+      do {
+        randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+      } while (randomNumber >= excludeMin && randomNumber <= excludeMax);
+
+      previousRandomNumbers.push(randomNumber);
+      document.getElementById("history").value = previousRandomNumbers.join("\n");
+    }
+
+    function clearHistory() {
+      previousRandomNumbers.length = 0;
+      document.getElementById("history").value = "";
+    }
+
+    function showSum() {
+      let sum = 0;
+      for (let i = 0; i < previousRandomNumbers.length; i++) {
+        sum += previousRandomNumbers[i];
+      }
+      document.getElementById("sum_result").innerHTML = "历史随机数的和为：" + sum;
+    }
+  </script>
+</body>
+</html>
