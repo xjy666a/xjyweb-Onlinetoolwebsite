@@ -1,0 +1,5 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Document</title> <script> function render() { return `V:{{2}}`; }document.addEventListener('DOMContentLoaded', () => {
+    const element = document.getElementById('text');
+    element.textContent = render();
+});
+</script></head> <body> <div id="text"></div> </body> </html>
