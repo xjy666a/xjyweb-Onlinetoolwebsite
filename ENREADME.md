@@ -30,7 +30,7 @@ The website offers the following key features:
 | Today in History | See what happened today in history |❌| Date & Time |
 | Date and BMI are calculated | Calculate date, BMI, etc. |✅| Date & Time |
 | Timer, countdown and alarm |  |✅| Date & Time |
-| Kanji Information Query | Query the definition, strokes, structure, and other information of Chinese characters No | Chinese Characters and Languages |
+| Chinese characters Information Query | Query the definition, strokes, structure, and other information of Chinese characters No |❌ |  Chinese Characters and Languages |
 | Conversion | Convert text to simplified or traditional |❌| Chinese Characters and Languages |
 | Garbage classification query |  |❌| Practical life |
 | ID card related | Generate and test ID numbers |❌| Practical life |
@@ -53,7 +53,7 @@ The website offers the following key features:
 | Password Leak Detection (Normal) | Check if your password is among the 500 million leaked passwords in the world, there is a premium version in password generation, but you need to be a member |❌| Password-related |
 | Today's Hot Spot | Query today's hot spots, from Baidu and Toutiao |❌| Entertainment & Social |
 | Good news/bad news generated |  |❌| Entertainment & Social |
-| Speech generation | It can generate the voice of Ding Zhen and so on No | Entertainment & Social |
+| Speech generation | It can generate the voice of Ding Zhen and so on No |❌| Entertainment & Social |
 | Sexual Orientation Test |  |✅| Personal Development |
 | Personal Stress Test |  |✅| Personal Development |
 | Paint | Easy Online Drawing |✅| AI & Creation |
