@@ -59,7 +59,7 @@ The website offers the following key features:
 | AI Paint | AI Paint to generate images | No | AI & Creation |
 | AI Chat (currently no context) | AI chat, currently AI will not remember previous chat history | No | AI & Creation |
 | AI Conversation (Premium) | AI Conversations, Copilot | No | AI & Creation |
-| Markdown Editor | Visual Markdown Editor | Yes | AI & Creation |
+| Markdown Editor | Visual Markdown Editor | No | AI & Creation |
 | National Capital Inquiry |  | Yes | Geography & Maps |
 | Chinese Historical Dynasties |  | Yes | Geography & Maps |
 | Weather Inquiry |  | NO | Geography & Maps |
