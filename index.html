@@ -1,28 +1,220 @@
-<!DOCTYPE html>  
-<html>  
-<head>  
-  <title>mg网站导航</title>  
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mg工具网开源库</title>
+  <link rel="stylesheet" href="https://cdn.staticfile.net/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
   <style>
-    a.button {
-      background-color: #4CAF50; /* 按钮颜色 */
-      color: white; /* 按钮文本颜色 */
-      padding: 10px 20px; /* 按钮内边距 */
-      border: none; /* 移除边框 */
-      border-radius: 4px; /* 圆角 */
-      text-decoration: none; /* 去除下划线 */
-      display: inline-block; /* 使文本成为块级元素 */
-      font-size: 16px; /* 字体大小 */
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('1.jpg');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      min-height: 100vh;
+      margin: 0;
+      backdrop-filter: blur(5px);
+  position: relative; /* 添加这一行 */
+  padding-bottom: 60px; /* 根据页脚高度调整 */
     }
-    a.button:hover {
-      background-color: #45a049; /* 鼠标悬停时的背景颜色 */
+    .card-link {
+      display: block;
+      text-decoration: none;
+      color: inherit;
     }
-   </style>   
-</head>  
-    <body id="ihpg" style="background-image: url('1.jpg'); background-size: cover; background-position: center;"> 
-     <h1>mg网站导航</h1>
-    <a href="https://jiyan.lanzouw.com/b013xzpng?" target="_blank" class="button">点击跳转至源码和其他文件下载网站(密码mg45)</a></p>
-     <a href=mggamedh.html target="_blank" class="button">点击跳转至mg小游戏导航页</a></p>
-     <a href=114514.html target="_blank" class="button">点击跳转至七班历史制作者名单</a></p>
-     <a href=2024wh.html target="_blank" class="button">点击跳转至2024发生的事</a></p>
-     <a href=204cebrate\2024cebrate.html target="_blank" class="button">点击跳转至庆祝2024</a></p>
+    .card-link:hover {
+      text-decoration: none;
+    }
+    #footer {
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      padding: 10px;
+      text-align: center;
+      width: 100%;
+  position: absolute; /* 添加这一行 */
+  bottom: 0; /* 添加这一行 */
+    }
+  </style>
+</head>
+
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+  <div id="app" class="container">
+    <h1 class="text-center mb-4" style="color: white">mg工具网</h1>
+
+   
+
+    <h2 style="color: white">小游戏：</h2>
+    <div class="row">
+      <div class="col-md-4 mb-4" v-for="game in filteredGames">
+        <a :href="game.url" target="_blank" class="card-link">
+          <div class="card">
+            <div class="card-body">
+              <strong><h5 class="card-title">{{ game.title }}</h5></strong>
+              <p class="card-text"><small class="text-muted">分类: {{ allCategories[game.category] }}</small></p>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <h2 style="color: white">工具:</h2>
+    <div class="row">
+      <div class="col-md-4 mb-4" v-for="tool in filteredTools">
+        <a :href="tool.url" target="_blank" class="card-link">
+          <div class="card">
+            <div class="card-body">
+              <strong><h5 class="card-title">{{ tool.title }}</h5></strong>
+              <strong><p class="card-text">{{ tool.description }}</p></strong>
+              <p class="card-text"><small class="text-muted">分类: {{ allCategories[tool.category] }}</small></p>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+<div id="footer">
+    <div>ICP</div>
+    <div>友情链接: <a href="https://ai.xjyweb.xyz" target="_blank">AI聊天</a></div>
+<div>友情链接: <a href="https://www.rainyun.com/jiyan_" target="_blank">本站由雨云提供计算服务</a></div>
+  </div>
+
+
+<body>
+  <script src="https://cdn.staticfile.net/vue/2.7.9/vue.js"></script>
+  <script>
+    function loadHeaderContent() {
+var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function() {
+        if (this.readyState === 4 && this.status === 200) {
+          var response = this.responseText;
+          var headerContent = response.split('<!--FOOTER_START-->')[0];
+          var footerContent = response.split('<!--FOOTER_START-->')[1];
+
+          document.getElementById("header-container").innerHTML = headerContent;
+          document.getElementById("footer-container").innerHTML = footerContent;
+        }
+      };
+      xhr.open("GET", "header.php", true);
+      xhr.send();
+    }
+
+    new Vue({
+      el: '#app',
+      data: {
+        searchQuery: '',
+        currentCategory: '',
+        games: [
+          { title: '点击mg慢速版', url: 'https://t.mg-tool.cn/djmg/djmg(d).html', category: '1' },
+          { title: '点击mg快速版', url: 'https://t.mg-tool.cn/djmg/djmg(s).html', category: '1' },
+          { title: '永远点不到的按钮', url: 'https://t.mg-tool.cn/buttoncant', category: '1' },
+          { title: '扫雷', url: 'https://t.mg-tool.cn/sl', category: '1' },
+          { title: '剪刀石头布', url: 'https://t.mg-tool.cn/jdstb', category: '1' },
+          { title: '坤坤打砖块', url: 'https://t.mg-tool.cn/cxk-ball', category: '1' },
+          { title: '数学计算小游戏', url: 'https://t.mg-tool.cn/sxcs', category: '1' },
+          { title: '古诗词挑战', url: 'https://t.mg-tool.cn/gsc', category: '1' },
+          { title: '敬请期待', url: 'https://t.mg-tool.cn/nogame.html', category: '100' },
+        ],
+        tools: [
+          { title: '随机数生成器', url: 'https://t.mg-tool.cn/Rambommber', description: '生成随机数字', category: '3' },
+          { title: '计算器', url: 'https://t.mg-tool.cn/jsj', description: '进行数学计算', category: '6' },
+          { title: '文本加密', url: 'https://t.mg-tool.cn/jiami', description: '加密解密文本', category: '6' },
+          { title: '英语与数字语转换', url: 'https://t.mg-tool.cn/ns', description: '英语和数字语言之间的相互转换', category: '6' },
+          { title: 'ip查询', url: 'https://t.mg-tool.cn/ipcha', description: '查询IP地址的位置和信息', category: '10' },
+          { title: '历史上的今天', url: 'https://t.mg-tool.cn/lis', description: '查看历史上的今天发生的事件', category: '2' },
+          { title: '汉字信息查询', url: 'https://t.mg-tool.cn/hz', description: '查询汉字的释义、笔画、结构等信息', category: '10' },
+          { title: '日期和BMI等计算', url: 'https://t.mg-tool.cn/rqjs', description: '计算日期、BMI等', category: '6' },
+          { title: '敏感词检测', url: 'https://t.mg-tool.cn/mingan', description: '检测文本中的敏感词', category: '10' },
+          { title: '身份证相关', url: 'https://t.mg-tool.cn/ID/ID.html', description: '生成，测试身份证号', category: '5' },
+          { title: '垃圾分类查询', url: 'https://t.mg-tool.cn/lj', description: '查询垃圾分类', category: '10' },
+          { title: '记事本', url: 'https://t.mg-tool.cn/jsb', description: '简易记事本', category: '5' },
+          { title: '计时器，倒计时和闹钟', url: 'https://t.mg-tool.cn/time', description: '计时器，倒计时和闹钟', category: '9' },
+          { title: 'HTML可视化编辑', url: 'https://t.mg-tool.cn/dmbj/html.html', description: '可视化编辑HTML', category: '3' },
+          { title: 'MC命名空间查询', url: 'https://t.mg-tool.cn/ID/MCID.html', description: '查询MC命名空间', category: '10' },
+          { title: '单位换算', url: 'https://t.mg-tool.cn/dwhs', description: '在线单位换算', category: '6' },
+          { title: '画图', url: 'https://t.mg-tool.cn/ht', description: '简易在线画图', category: '7' },
+          { title: '密码生成和密码泄露检测', url: 'https://t.mg-tool.cn/password', description: '密码自定义生成，保存，还有自动的密码泄露检测（需会员）', category: '12' },
+          { title: '圆周率查询', url: 'https://t.mg-tool.cn/pi', description: '查询圆周率100万内有没有指定数字', category: '10' },
+          { title: '系统信息查询', url: 'https://t.mg-tool.cn/xtxx', description: '系统信息查询（仅PC可用）', category: '5' },
+          { title: '摩斯电码转换', url: 'https://t.mg-tool.cn/mos', description: '摩斯电码转换', category: '6' },
+          { title: 'uuid生成和各进制转换', url: 'https://t.mg-tool.cn/uuid', description: '生成uuid和各进制转换', category: '6' },
+          { title: '标准地图', url: 'https://t.mg-tool.cn/map', description: '标准中国地图和世界地图（天地图支持）', category: '4' },
+          { title: 'mc问答', url: 'https://t.mg-tool.cn/wd/mcwd.html', description: '测试你是否玩懂mc（来源：mcwiki）', category: '10' },
+          { title: '重复内容查询', url: 'https://t.mg-tool.cn/cf', description: '查询两段文本的重复内容', category: '10' },
+          { title: '国家首都查询', url: 'https://t.mg-tool.cn/sdcx', description: '查询国家首都', category: '4' },
+          { title: '我国历史朝代', url: 'https://t.mg-tool.cn/cd', description: '我国历史朝代', category: '2' },
+          { title: '天气查询', url: 'https://t.mg-tool.cn/tq', description: '天气查询', category: '10' },
+          { title: 'QQ音乐解析和下载', url: 'https://t.mg-tool.cn/music/qq.html', description: '解析并下载QQ音乐内的音频和歌词', category: '6' },
+          { title: 'mcUUID，皮肤，披风查询', url: 'https://t.mg-tool.cn/mccx', description: '查询minecraft玩家的UUID，披风，和皮肤', category: '10' },
+          { title: 'AI画图', url: 'https://t.mg-tool.cn/aiht', description: 'AI画图生成图片', category: '8' },
+          { title: 'AI聊天（目前无上下文）', url: 'https://t.mg-tool.cn/ai', description: 'AI聊天，目前AI不会记住之前的聊天记录', category: '8' },
+          { title: '短链接生成', url: 'https://t.mg-tool.cn/dlj', description: '生成短链接，防红链接', category: '6' },
+          { title: '三角形面积计算', url: 'https://t.mg-tool.cn/tx/sjxmj.html', description: '计算三角形面积（海伦公式）', category: '7' },
+          { title: '圆形扇形周长面积计算', url: 'https://t.mg-tool.cn/tx/yxsx.html', description: '计算圆形和扇形面积周长', category: '7' },
+          { title: '平行四边形面积计算', url: 'https://t.mg-tool.cn/tx/pxsbx.html', description: '计算平行四边形面积', category: '7' },
+          { title: 'python代码在线编辑，运行', url: 'https://t.mg-tool.cn/dmbj/py.html', description: 'python代码在线编辑，运行', category: '3' },
+          { title: '贷款利息计算', url: 'https://t.mg-tool.cn/dklx', description: '贷款利息计算', category: '12' },
+          { title: '24点计算和生成', url: 'https://t.mg-tool.cn/24p', description: '24点计算', category: '99' },
+          { title: 'AI对话（高级版）', url: 'https://ai.xjyweb.xyz/web/#/', description: 'AI对话（Copilot)', category: '8' },   
+          { title: '密码泄露检测（普通版）', url: 'https://t.mg-tool.cn/password/passxl.html', description: '查询你的密码是否在全球5亿的已泄露密码中，密码生成中有高级版，但需会员', category: '10' },   
+          { title: '今日热点查询', url: 'https://t.mg-tool.cn/tt', description: '查询今日热点。来源百度和今日头条', category: '10' },  
+          { title: '喜报/悲报生成', url: 'https://t.mg-tool.cn/xbbb', description: '生成喜报和悲报', category: '99' },  
+          { title: '语音生成', url: 'https://t.mg-tool.cn/yysc', description: '能生成丁真等的语音', category: '8' },  
+          { title: '简繁转换', url: 'https://t.mg-tool.cn/jfzh', description: '能将文字转换为简体或繁体', category: '6' }, 
+          { title: '人民币小写转大写', url: 'https://t.mg-tool.cn/rmb', description: '人民币小写转大写', category: '6' },  
+          { title: '二维码生成', url: 'https://t.mg-tool.cn/qrcode', description: '生成二维码', category: '11' },
+          { title: '性取向测试', url: 'https://t.mg-tool.cn/xqxcs', description: '性取向测试', category: '13' },
+          { title: 'Whois查询', url: 'https://t.mg-tool.cn/whois', description: '查询网站的Whois', category: '10' },
+          { title: '个人压力测试', url: 'https://t.mg-tool.cn/ylcs', description: '个人压力测试', category: '13' },
+          { title: 'Markdown编辑器', url: 'https://t.mg-tool.cn/mark', description: '可视化Markdown编辑器', category: '3' },
+          { title: '网站地图生成', url: 'https://t.mg-tool.cn/site', description: '网站sitemap生成', category: '11' },
+          { title: '敬请期待', url: 'https://t.mg-tool.cn/nogame.html', description: '敬请期待', category: '100' },
+         ],
+        categoryMap: {
+          '': '全部',
+          '100': '敬请期待',
+         '1': '游戏类',
+          '2': '历史类',
+          '3': '编程类',
+          '4': '地理类',
+          '5': '信息类',
+          '6': '转换类',
+          '7': '几何类',
+          '8': 'AI类',
+          '9': '时间类',
+          '10': '查询类',
+          '11': '生成类',
+          '12': '生活类',
+          '13': '测试类',
+          '99': '其他',
+        }
+      },
+      computed: {
+        allCategories() {
+          return this.categoryMap;
+        },
+        filteredGames() {
+          return this.filterItems(this.games);
+        },
+        filteredTools() {
+          return this.filterItems(this.tools);
+        }
+      },
+      methods: {
+        filterItems(items) {
+          const query = this.searchQuery.trim().toLowerCase();
+          const category = this.currentCategory.trim();
+          return items.filter(item => {
+            return item.title.toLowerCase().includes(query) && (category === '' || item.category === category);
+          });
+        }
+      }
+    });
+  </script>
+</body>
 </html>
