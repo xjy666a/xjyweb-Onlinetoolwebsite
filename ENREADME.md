@@ -1,3 +1,7 @@
+#### [[中文]](README.md)                   [[English]](ENREADME.md)
+
+
+
 # MG Online Tools
 
 [MG Online Tools] (https://t.mg-tool.cn/) is a website that provides a variety of online tools, covering games and entertainment, word processing, networks and systems, date and time, Chinese characters and languages, practical life, mathematics and computing, programming, passwords, entertainment and social networking, personal development, AI and creation, geography and maps, games, multimedia and other fields.
