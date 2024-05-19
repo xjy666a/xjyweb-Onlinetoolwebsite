@@ -1,6 +1,6 @@
 #### [[中文]](README.md)                   [[English]](ENREADME.md)
 
-## 开源网页：[mg工具网开源库导航](https://xjy666a.github.io/xjyweb-Onlinetoolwebsite/)
+#### 开源网页：[mg工具网开源库导航](https://xjy666a.github.io/xjyweb-Onlinetoolwebsite/)
 
 # MG工具网
 
@@ -80,6 +80,13 @@
 ## 开源说明
 
 该项目部分功能为开源,部分功能为闭源,具体请查看上文表格中标注的'❌'的功能。开源部分使用MIT许可协议[【LICENSE】](LICENSE)。
+
+
+## 常见问题
+
+![BUG.png](BUG.png)
+如果出现上面所示错误，请无视，因为Github Page不支持php，所以这里引入头文件会报错，如果你想看这个的头文件的样子，请访问[https://t.mg-tool.cn/header.php](https://t.mg-tool.cn/header.php)查看
+该头文件源代码：[header.php](header.php "header.php")
 
 ## 如何贡献
 
