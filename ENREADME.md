@@ -86,6 +86,7 @@ Some of the project's features are open source and some are closed-source, pleas
 ## Frequently Asked Questions
 
 ! [BUG.png](BUG.png)
+
 If you get the error shown above, please ignore it, because Github Page does not support php, so introducing the header file here will give an error, if you want to see what this header file looks like, please visit [https://t.mg-tool.cn/header.php](https://t.mg-tool.cn/header.php) to view
 Source code for this header: [header.php](header.php "header.php")
 

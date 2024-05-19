@@ -85,6 +85,7 @@
 ## 常见问题
 
 ![BUG.png](BUG.png)
+
 如果出现上面所示错误，请无视，因为Github Page不支持php，所以这里引入头文件会报错，如果你想看这个的头文件的样子，请访问[https://t.mg-tool.cn/header.php](https://t.mg-tool.cn/header.php)查看
 该头文件源代码：[header.php](header.php "header.php")
 
