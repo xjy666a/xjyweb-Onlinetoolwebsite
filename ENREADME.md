@@ -76,7 +76,7 @@ The project's interface documentation, accessible via https://ux05jeo2fk.apifox.
 
 ## Open Source Description
 
-Some of the project's features are open source and some are closed-source, please see the 'no' function marked in the table above. THE OPEN SOURCE PART USES THE MIT LICENSE [[LICENSE]] (LICENSE).
+Some of the project's features are open source and some are closed-source, please see the 'no' function marked in the table above. THE OPEN SOURCE PART USES THE MIT LICENSE [LICENSE] (LICENSE).
 
 ## How to contribute
 
