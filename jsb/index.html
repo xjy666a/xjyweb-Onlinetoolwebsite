@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+    <meta charset="utf-8">
+    <title>网页记事本</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .form-control {
+            border-radius: 0;
+        }
+        .btn {
+            border-radius: 0;
+        }
+        #textArea {
+            width: 100%;
+            height: 300px;
+            padding: 10px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+   
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+    
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">网页记事本</h1>
+                <div class="form-group">
+                    <select id="fontSizeSelect" class="form-control">
+                        <option value="12px">12px</option>
+                        <option value="16px">16px</option>
+                        <option value="20px">20px</option>
+                        <option value="24px">24px</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="color" class="form-control" id="colorPicker">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary" id="saveBtn">Save as TXT</button>
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" id="textArea" placeholder="输入你的记录..."></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    function loadHeaderContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("header-container").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "https://t.mg-tool.cn/header.php", true);
+        xhr.send();
+    }
+
+        const fontSizeSelect = document.getElementById('fontSizeSelect');
+        const colorPicker = document.getElementById('colorPicker');
+        const saveBtn = document.getElementById('saveBtn');
+        const textArea = document.getElementById('textArea');
+
+        fontSizeSelect.addEventListener('change', () => {
+            textArea.style.fontSize = fontSizeSelect.value;
+        });
+
+        colorPicker.addEventListener('input', () => {
+            textArea.style.color = colorPicker.value;
+        });
+
+        saveBtn.addEventListener('click', () => {
+            const content = textArea.value;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.download = 'notes.txt';
+            link.href = url;
+            link.click();
+        });
+    </script>
+</body>
+</html>

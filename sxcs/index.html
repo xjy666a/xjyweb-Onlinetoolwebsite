@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>数学训练</title>
+
+    <link rel="stylesheet" href="https://cdn.staticfile.net/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <style>
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            text-align: center;
+
+            padding-top: 50px;
+
+        }
+
+        #quiz {
+
+            margin-top: 50px;
+
+        }
+
+        .question {
+
+            font-size: 24px;
+
+            margin-bottom: 20px;
+
+        }
+
+        #result {
+
+            margin-top: 50px;
+
+            font-size: 24px;
+
+        }
+
+    </style>
+
+</head>
+
+
+   
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+    
+
+    <div class="container">
+
+        <h1>数学训练</h1>
+
+        <div>
+
+            <label for="difficulty">选择难度级别:</label>
+
+            <select id="difficulty" class="form-control">
+
+                <option value="0">简单</option>
+
+                <option value="1">中等</option>
+
+                <option value="2">困难</option>
+
+                <option value="3">超难</option>
+
+            </select>
+
+        </div>
+
+        <div>
+
+            <label>选择计算类型:</label>
+
+            <div class="form-check form-check-inline">
+
+                <input class="form-check-input" type="checkbox" id="addition" value="addition" checked>
+
+                <label class="form-check-label" for="addition">加法</label>
+
+            </div>
+
+            <div class="form-check form-check-inline">
+
+                <input class="form-check-input" type="checkbox" id="subtraction" value="subtraction" checked>
+
+                <label class="form-check-label" for="subtraction">减法</label>
+
+            </div>
+
+            <div class="form-check form-check-inline">
+
+                <input class="form-check-input" type="checkbox" id="multiplication" value="multiplication" checked>
+
+                <label class="form-check-label" for="multiplication">乘法</label>
+
+            </div>
+
+        </div>
+
+        <button class="btn btn-primary" onclick="startQuiz()">开始</button>
+
+        <div id="quiz" style="display: none;">
+
+            <div id="question"></div>
+
+            <input type="text" id="answer" class="form-control" placeholder="输入你的答案">
+
+            <button class="btn btn-primary" onclick="checkAnswer()">提交</button>
+
+            <div id="result"></div>
+
+            <div id="timer">
+
+                <span>单题计时器: <span id="question-timer">0</span></span>
+
+                <span>总计时器: <span id="total-timer">0</span></span>
+
+            </div>
+
+        </div>
+
+        <div id="final-result"></div>
+
+    </div>
+
+
+
+<script>
+    function loadHeaderContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("header-container").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "https://t.mg-tool.cn/header.php", true);
+        xhr.send();
+    }
+
+        const difficulties = [
+
+            { level: '简单', maxNum: 10 },
+
+            { level: '中等', maxNum: 100 },
+
+            { level: '困难', maxNum: 1000 },
+
+            { level: '超难', maxNum: 10000 }
+
+        ];
+
+
+
+        const operations = ['+', '-', '*'];
+
+
+
+        const questions = [];
+
+        let currentQuestion = 0;
+
+        let score = 0;
+
+        let questionTimer;
+
+        let totalTimer;
+
+        let totalTime = 0;
+
+
+
+        function generateQuestion(difficulty, operationType) {
+
+            const { level, maxNum } = difficulty;
+
+            const num1 = Math.floor(Math.random() * maxNum);
+
+            const num2 = Math.floor(Math.random() * maxNum);
+
+            const operator = operations[operationType];
+
+            let answer;
+
+
+
+            switch (operator) {
+
+                case '+':
+
+                    answer = num1 + num2;
+
+                    break;
+
+                case '-':
+
+                    answer = num1 - num2;
+
+                    break;
+
+                case '*':
+
+                    answer = num1 * num2;
+
+                    break;
+
+            }
+
+
+
+            const question = `${level} 题目: ${num1} ${operator} ${num2} = ?`;
+
+
+
+            return { question, answer };
+
+        }
+
+
+
+        function displayQuestion() {
+
+            const questionsContainer = document.getElementById('question');
+
+            questionsContainer.innerHTML = '';
+
+
+
+            if (currentQuestion < 20) {
+
+                const difficultyLevel = document.getElementById('difficulty').value;
+
+                const difficulty = difficulties[difficultyLevel];
+
+                const checkedOperations = Array.from(document.querySelectorAll('input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
+
+                const operationType = Math.floor(Math.random() * checkedOperations.length);
+
+                const { question, answer } = generateQuestion(difficulty, checkedOperations.indexOf(checkedOperations[operationType]));
+
+                questions.push({ question, answer });
+
+
+
+                const questionElement = document.createElement('div');
+
+                questionElement.className = 'question';
+
+                questionElement.textContent = question;
+
+
+
+                questionsContainer.appendChild(questionElement);
+
+                startQuestionTimer();
+
+            } else {
+
+                clearInterval(totalTimer);
+
+                showFinalResult();
+
+            }
+
+        }
+
+
+
+        function checkAnswer() {
+
+            const answerInput = document.getElementById('answer');
+
+            const userAnswer = parseInt(answerInput.value);
+
+            const currentQuestionObj = questions[currentQuestion];
+
+            const resultContainer = document.getElementById('result');
+
+            const questionTimerElement = document.getElementById('question-timer');
+
+
+
+            clearInterval(questionTimer);
+
+            const questionTime = parseInt(questionTimerElement.textContent);
+
+
+
+            if (userAnswer === currentQuestionObj.answer) {
+
+                resultContainer.innerHTML = `<p>正确答案: ${currentQuestionObj.answer}</p><p>你的答案: ${userAnswer}</p><p>回答正确!</p><p>用时: ${questionTime}秒</p>`;
+
+                score += 5;
+
+            } else {
+
+                resultContainer.innerHTML = `<p>正确答案: ${currentQuestionObj.answer}</p><p>你的答案: ${userAnswer}</p><p>回答错误!</p><p>用时: ${questionTime}秒</p>`;
+
+            }
+
+
+
+            answerInput.value = '';
+
+            currentQuestion++;
+
+            setTimeout(displayQuestion, 2000);
+
+        }
+
+
+
+        function showFinalResult() {
+
+            const finalResultContainer = document.getElementById('final-result');
+
+            finalResultContainer.innerHTML = '';
+
+
+
+            let rating;
+
+            if (score >= 90) {
+
+                rating = '优秀';
+
+            } else if (score >= 80) {
+
+                rating = '良好';
+
+            } else if (score >= 70) {
+
+                rating = '中等';
+
+            } else if (score >= 60) {
+
+                rating = '及格';
+
+            } else {
+
+                rating = '不及格';
+
+            }
+
+
+
+            finalResultContainer.innerHTML = `<h2>结果</h2><p>你的分数是: ${score}分, 评级: ${rating}</p><p>总用时: ${totalTime}秒，刷新网页才能开始下一局</p>`;
+
+        }
+
+
+
+        function startQuiz() {
+
+            const quizContainer = document.getElementById('quiz');
+
+            quizContainer.style.display = 'block';
+
+            startTotalTimer();
+
+            displayQuestion();
+
+        }
+
+
+
+        function startQuestionTimer() {
+
+            let questionTime = 0;
+
+            const questionTimerElement = document.getElementById('question-timer');
+
+            questionTimerElement.textContent = questionTime;
+
+
+
+            questionTimer = setInterval(() => {
+
+                questionTime++;
+
+                questionTimerElement.textContent = questionTime;
+
+            }, 1000);
+
+}
+
+function startTotalTimer() {
+
+        totalTime = 0;
+
+        const totalTimerElement = document.getElementById('total-timer');
+
+        totalTimerElement.textContent = totalTime;
+
+
+
+        totalTimer = setInterval(() => {
+
+            totalTime++;
+
+            totalTimerElement.textContent = totalTime;
+
+        }, 1000);
+
+    }
+
+</script>
+
+</body> </html>

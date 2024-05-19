@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<meta charset="UTF-8">
+
+<head>
+
+
+    <title>在线 Python 解释器</title>
+
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="prism.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .card {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-control {
+            border-radius: 0;
+        }
+
+        .btn {
+            border-radius: 0;
+        }
+
+        pre[class*="language-"] {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+    
+
+
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">在线 Python 解释器</h1>
+                <textarea id="code-input" class="form-control" rows="10" placeholder="在此输入 Python 代码..."></textarea>
+                <pre><code id="code-display" class="language-python"></code></pre>
+                <div class="d-flex justify-content-between mt-2">
+                    <button id="run" class="btn btn-primary">运行</button>
+                    <div>
+                        <button id="save" class="btn btn-secondary mr-2">保存</button>
+                        <button id="copy" class="btn btn-secondary">复制</button>
+                    </div>
+                </div>
+                <div id="console" class="form-control mt-3" style="height: 200px; overflow-y: auto;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.20.0/full/pyodide.js"></script>
+    <script src="prism.js"></script>
+
+    <script>
+    function loadHeaderContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("header-container").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "https://t.mg-tool.cn/header.php", true);
+        xhr.send();
+    }
+        async function main() {
+            const pyodide = await loadPyodide();
+
+            const codeInput = document.getElementById('code-input');
+            const codeDisplay = document.getElementById('code-display');
+            const runButton = document.getElementById('run');
+            const saveButton = document.getElementById('save');
+            const copyButton = document.getElementById('copy');
+            const consoleOutput = document.getElementById('console');
+
+            // 监听 input 事件,同步输入到有语法高亮的输入框
+            codeInput.addEventListener('input', () => {
+                codeDisplay.textContent = codeInput.value;
+                Prism.highlightElement(codeDisplay);
+            });
+
+            runButton.addEventListener('click', async () => {
+                consoleOutput.innerHTML = '';
+                pyodide.setInterruptBuffer();
+                try {
+                    pyodide.globals.set('user_code', codeInput.value);
+                    await pyodide.runPythonAsync(`
+                        import io
+                        import sys
+
+                        # 清理输入缓存
+                        if 'input_buffer' in sys.__dict__:
+                            del sys.__dict__['input_buffer']
+
+                        sys.stdout = io.StringIO()
+                        exec(user_code)
+                        output = sys.stdout.getvalue()
+                    `);
+                    const output = pyodide.globals.get('output');
+                    consoleOutput.innerHTML += output;
+                } catch (err) {
+                    consoleOutput.innerHTML += `\n${err}`;
+                }
+            });
+
+            saveButton.addEventListener('click', () => {
+                const fileName = prompt('请输入要保存的文件名(不需要.py后缀):');
+                if (fileName) {
+                    const blob = new Blob([codeInput.value], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `${fileName}.py`;
+                    link.click();
+                    URL.revokeObjectURL(url);
+                }
+            });
+
+            copyButton.addEventListener('click', () => {
+                navigator.clipboard.writeText(codeInput.value);
+                alert('代码已复制到剪贴板!');
+            });
+        }
+
+        main();
+    </script>
+</body>
+</html>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+
+<head>
+
+
+  <title>计时器、倒计时和闹钟</title>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    .form-control {
+      border-radius: 0;
+    }
+
+    .btn {
+      border-radius: 0;
+    }
+  </style>
+</head>
+
+
+   
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+    
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-body">
+            <h1 class="card-title">计时器和倒计时</h1>
+            <div class="timer">
+              <span id="timer" class="display-4">00:00:00</span>
+            </div>
+            <div class="controls mt-4">
+              <button class="btn btn-primary" onclick="startTimer()">开始计时</button>
+              <button class="btn btn-primary" onclick="stopTimer()">停止计时</button>
+              <button class="btn btn-primary" onclick="resetTimer()">重置计时</button>
+              <div class="input-group mt-3">
+                <input type="text" id="hours" class="form-control" placeholder="时" maxlength="2">
+                <input type="text" id="minutes" class="form-control" placeholder="分" maxlength="2">
+                <input type="text" id="seconds" class="form-control" placeholder="秒" maxlength="2">
+                <div class="input-group-append">
+                  <button class="btn btn-primary" onclick="startCustomCountdown()">开始自定义倒计时</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <h1 class="card-title">闹钟</h1>
+            <div class="input-group">
+              <input type="text" id="alarm-hours" class="form-control" placeholder="时" maxlength="2">
+              <input type="text" id="alarm-minutes" class="form-control" placeholder="分" maxlength="2">
+              <div class="input-group-append">
+                <button class="btn btn-primary" onclick="setAlarm()">设置闹钟</button>
+              </div>
+            </div>
+            <p id="alarm-message" class="mt-3"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="card">
+          <div class="card-body">
+            <h1 class="card-title">时区时间</h1>
+            <div id="main-time">
+              <p id="local-time" class="lead display-4"></p>
+              <p id="utc-time" class="lead display-4"></p>
+            </div>
+            <div class="world-time mt-4">
+              <p id="beijing-time" class="lead"></p>
+              <p id="london-time" class="lead"></p>
+              <p id="new-york-time" class="lead"></p>
+              <p id="tokyo-time" class="lead"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+    function loadHeaderContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("header-container").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "https://t.mg-tool.cn/header.php", true);
+        xhr.send();
+    }
+    let timerInterval;
+    let countdown;
+    let alarmTimeout;
+
+    function updateTimer(time) {
+      const hours = Math.floor(time / 3600);
+      const minutes = Math.floor((time % 3600) / 60);
+      const seconds = time % 60;
+      document.getElementById('timer').innerHTML = `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
+    }
+
+    function padZero(num) {
+      return num.toString().padStart(2, '0');
+    }
+
+    function startTimer() {
+      let startTime = Date.now();
+      timerInterval = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        updateTimer(Math.floor(elapsed / 1000));
+      }, 100);
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval);
+    }
+
+    function resetTimer() {
+      stopTimer();
+      updateTimer(0);
+    }
+
+    function startCountdown(seconds) {
+      countdown = seconds;
+      updateTimer(countdown);
+      const countdownInterval = setInterval(() => {
+        countdown--;
+        updateTimer(countdown);
+        if (countdown === 0) {
+          clearInterval(countdownInterval);
+          alert('倒计时结束!');
+        }
+      }, 1000);
+    }
+
+    function startCustomCountdown() {
+      const hours = parseInt(document.getElementById('hours').value) || 0;
+      const minutes = parseInt(document.getElementById('minutes').value) || 0;
+      const seconds = parseInt(document.getElementById('seconds').value) || 0;
+      const totalSeconds = hours * 3600 + minutes * 60 + seconds;
+      if (totalSeconds > 0) {
+        startCountdown(totalSeconds);
+      } else {
+        alert('请输入有效的倒计时时间。');
+      }
+    }
+
+    function updateWorldTime() {
+      const localTime = new Date().toLocaleString('en-US', { timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone });
+      const utcTime = new Date().toLocaleString('en-US', { timeZone: 'UTC' });
+      const beijingTime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Shanghai' });
+      const londonTime = new Date().toLocaleString('en-US', { timeZone: 'Europe/London' });
+      const newYorkTime = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
+      const tokyoTime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Tokyo' });
+
+      document.getElementById('local-time').textContent = `本地时间: ${localTime}`;
+      document.getElementById('utc-time').textContent = `UTC时间: ${utcTime}`;
+      document.getElementById('beijing-time').textContent = `北京时间: ${beijingTime}`;
+      document.getElementById('london-time').textContent = `伦敦时间: ${londonTime}`;
+      document.getElementById('new-york-time').textContent = `纽约时间: ${newYorkTime}`;
+      document.getElementById('tokyo-time').textContent = `东京时间: ${tokyoTime}`;
+    }
+
+    function setAlarm() {
+      const alarmHours = parseInt(document.getElementById('alarm-hours').value) || 0;
+      const alarmMinutes = parseInt(document.getElementById('alarm-minutes').value) || 0;
+      const alarmTime = new Date();
+      alarmTime.setHours(alarmHours);
+      alarmTime.setMinutes(alarmMinutes);
+      alarmTime.setSeconds(0);
+
+      const now = new Date();
+      const timeDiff = alarmTime.getTime() - now.getTime();
+
+      if (timeDiff > 0) {
+        clearTimeout(alarmTimeout);
+        alarmTimeout = setTimeout(() => {
+          alert('闹钟响起!');
+          document.getElementById('alarm-message').textContent = '闹钟响起!';
+        }, timeDiff);
+        document.getElementById('alarm-message').textContent = `闹钟已设置为 ${padZero(alarmHours)}:${padZero(alarmMinutes)}`;
+      } else {
+        alert('请输入有效的闹钟时间。');
+      }
+    }
+
+    setInterval(updateWorldTime, 1000);
+    updateWorldTime();
+  </script>
+</body>
+
+</html>

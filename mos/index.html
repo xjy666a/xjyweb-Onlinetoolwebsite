@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 获取顶栏 HTML 内容
+    fetchHeader();
+});
+
+function fetchHeader() {
+    fetch('https://t.mg-tool.cn/header.php')
+        .then(response => response.text())
+        .then(data => {
+            // 将顶栏 HTML 内容插入页面
+            document.body.innerHTML = data + document.body.innerHTML;
+        })
+        .catch(error => {
+            console.error('获取顶栏内容时出错:', error);
+        });
+}
+</script>
+
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>文字和摩斯电码转换器</title>
+
+    <link rel="stylesheet" href="https://cdn.staticfile.net/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <style>
+
+        .card {
+
+            margin-top: 20px;
+
+        }
+
+    </style>
+
+</head>
+
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+
+    <div class="container">
+
+        <div class="row justify-content-center">
+
+            <div class="col-md-6">
+
+                <div class="card">
+
+                    <div class="card-header">
+
+                        <h4>文字和摩斯电码转换器</h4>
+
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="form-group">
+
+                            <textarea class="form-control" id="input-text" rows="3" placeholder="输入文字或摩斯电码"></textarea>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <button class="btn btn-primary" onclick="convertText()">转换</button>
+
+                        </div>
+
+                        <div class="form-group">
+
+                            <textarea class="form-control" id="output-text" rows="3" placeholder="转换结果" readonly></textarea>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <script>
+    function loadHeaderContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("header-container").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "https://t.mg-tool.cn/header.php", true);
+        xhr.send();
+    }
+
+        const morseAlphabet = {
+
+            'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.',
+
+            'F': '..-.', 'G': '--.', 'H': '....', 'I': '..', 'J': '.---',
+
+            'K': '-.-', 'L': '.-..', 'M': '--', 'N': '-.', 'O': '---',
+
+            'P': '.--.', 'Q': '--.-', 'R': '.-.', 'S': '...', 'T': '-',
+
+            'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-', 'Y': '-.--', 'Z': '--..',
+
+            '0': '-----', '1': '.----', '2': '..---', '3': '...--', '4': '....-',
+
+            '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.',
+
+            ' ': '/'
+
+        };
+
+
+
+        function convertToMorse(text) {
+
+            text = text.toUpperCase();
+
+            let morse = '';
+
+            for (let i = 0; i < text.length; i++) {
+
+                const char = text[i];
+
+                if (morseAlphabet[char]) {
+
+                    morse += morseAlphabet[char] + ' ';
+
+                }
+
+            }
+
+            return morse.trim();
+
+        }
+
+
+
+        function convertFromMorse(morse) {
+
+            let text = '';
+
+            const words = morse.split('/');
+
+            for (let i = 0; i < words.length; i++) {
+
+                const word = words[i].trim();
+
+                let chars = word.split(' ');
+
+                for (let j = 0; j < chars.length; j++) {
+
+                    const char = chars[j];
+
+                    const letter = Object.keys(morseAlphabet).find(key => morseAlphabet[key] === char);
+
+                    if (letter) {
+
+                        text += letter;
+
+                    }
+
+                }
+
+                text += ' ';
+
+            }
+
+            return text.trim();
+
+        }
+
+
+
+        function convertText() {
+
+            const inputText = document.getElementById('input-text').value;
+
+            let outputText = '';
+
+            if (inputText.includes('.') || inputText.includes('-')) {
+
+                outputText = convertFromMorse(inputText);
+
+            } else {
+
+                outputText = convertToMorse(inputText);
+
+            }
+
+            document.getElementById('output-text').value = outputText;
+
+        }
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>系统信息查看</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+
+  <style>
+
+    .card {
+
+      max-width: 500px;
+
+      margin: 0 auto;
+
+    }
+
+  </style>
+
+</head>
+
+
+   
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+    
+
+  <div class="container">
+
+    <div class="row justify-content-center mt-5">
+
+      <div class="col-md-6">
+
+        <div class="card">
+
+          <div class="card-header bg-primary text-white">
+
+            系统信息
+
+          </div>
+
+          <div class="card-body">
+
+            <div id="system-info"></div>
+
+            <button class="btn btn-primary" onclick="showMoreInfo()">查询更多</button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+<script>
+    function loadHeaderContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("header-container").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "https://t.mg-tool.cn/header.php", true);
+        xhr.send();
+    }
+
+    function getSystemInfo() {
+
+      const systemInfo = {
+
+        os: navigator.userAgentData.platform,
+
+        cpu: navigator.hardwareConcurrency,
+
+        gpu: navigator.gpu ? navigator.gpu.renderer : 'N/A',
+
+        isMobile: /Mobi|Android/i.test(navigator.userAgent)
+
+      };
+
+
+
+      if (systemInfo.isMobile) {
+
+        systemInfo.mobileInfo = {
+
+          osVersion: navigator.userAgent.match(/Android\s(\d+\.\d+)/i)[1],
+
+          device: navigator.userAgent.match(/\((.*?)\)/)[1]
+
+        };
+
+      }
+
+
+
+      return systemInfo;
+
+    }
+
+
+
+    function displaySystemInfo(systemInfo, showMore = false) {
+
+      const infoContainer = document.getElementById('system-info');
+
+      let infoHTML = '';
+
+
+
+      if (systemInfo.isMobile) {
+
+        infoHTML += `
+
+          <p>操作系统版本: Android ${systemInfo.mobileInfo.osVersion}</p>
+
+          <p>设备型号: ${systemInfo.mobileInfo.device}</p>
+
+        `;
+
+      } else {
+
+        infoHTML += `
+
+          <p>操作系统: ${systemInfo.os}</p>
+
+          <p>CPU核心数: ${systemInfo.cpu}</p>
+
+          <p>GPU: ${systemInfo.gpu}</p>
+
+        `;
+
+      }
+
+
+
+      if (showMore) {
+
+        infoHTML += `
+
+          <p>User Agent: ${navigator.userAgent}</p>
+
+          <p>Language: ${navigator.language}</p>
+
+          <p>Cookies Enabled: ${navigator.cookieEnabled}</p>
+
+          <p>Online: ${navigator.onLine}</p>
+
+        `;
+
+      }
+
+
+
+      infoContainer.innerHTML = infoHTML;
+
+    }
+
+
+
+    function showMoreInfo() {
+
+      const systemInfo = getSystemInfo();
+
+      displaySystemInfo(systemInfo, true);
+
+    }
+
+
+
+    const systemInfo = getSystemInfo();
+
+    displaySystemInfo(systemInfo);
+
+  </script>
+
+</body>
+
+</html>

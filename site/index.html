@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网站地图生成器</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.net/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .card {
+            margin-bottom: 20px;
+        }
+        #preview {
+            white-space: pre-wrap;
+            font-family: Consolas, monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center my-5">网站地图生成器</h1>
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>输入网址(每行一个)</h5>
+                    </div>
+                    <div class="card-body">
+                        <textarea class="form-control" id="urls" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5>输入网页链接进行自动扫描</h5>
+                    </div>
+                    <div class="card-body">
+                        <input type="text" class="form-control" id="scanUrl" placeholder="https://example.com">
+                        <button class="btn btn-primary mt-2" id="scanBtn">扫描</button>
+                        <div class="progress mt-2 d-none" id="scanProgress">
+                            <div class="progress-bar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5>输入最后更新时间</h5>
+                    </div>
+                    <div class="card-body">
+                        <input type="text" class="form-control" id="lastmod" placeholder="年-月-日">
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-block" id="generate">生成网站地图</button>
+                <a href="#" class="btn btn-success btn-block d-none" id="download" download="sitemap.xml">下载网站地图</a>
+                <div class="card d-none" id="previewCard">
+                    <div class="card-header">
+                        <h5>预览</h5>
+                    </div>
+                    <div class="card-body">
+                        <pre><code id="preview"></code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const urlsArea = document.getElementById('urls');
+        const lastmodInput = document.getElementById('lastmod');
+        const generateBtn = document.getElementById('generate');
+        const downloadLink = document.getElementById('download');
+        const previewCode = document.getElementById('preview');
+        const previewCard = document.getElementById('previewCard');
+        const scanUrlInput = document.getElementById('scanUrl');
+        const scanBtn = document.getElementById('scanBtn');
+        const scanProgress = document.getElementById('scanProgress');
+        const progressBar = scanProgress.querySelector('.progress-bar');
+
+        const commonLibraryNames = ['bootstrap', 'jquery', 'react', 'angular', 'vue'];
+
+        generateBtn.addEventListener('click', generateSitemap);
+        scanBtn.addEventListener('click', scanUrls);
+
+        function generateSitemap() {
+            const urls = urlsArea.value.trim().split('\n');
+            const lastmod = lastmodInput.value.trim();
+
+            if (!urls.length || !lastmod) {
+                alert('请输入网址和最后更新时间。');
+                return;
+            }
+
+            const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urls.map(url => `
+    <url>
+        <loc>${url}</loc>
+        <lastmod>${lastmod}</lastmod>
+    </url>
+`).join('')}
+</urlset>`;
+
+            const blob = new Blob([sitemap], { type: 'text/xml' });
+            const url = URL.createObjectURL(blob);
+            downloadLink.href = url;
+            downloadLink.classList.remove('d-none');
+            previewCode.textContent = sitemap;
+            previewCard.classList.remove('d-none');
+        }
+
+        async function scanUrls() {
+            const url = scanUrlInput.value.trim();
+            if (!url) {
+                alert('请输入网页链接。');
+                return;
+            }
+
+            scanProgress.classList.remove('d-none');
+            progressBar.style.width = '0%';
+            progressBar.setAttribute('aria-valuenow', 0);
+
+            const interval = setInterval(() => {
+                const currentWidth = parseInt(progressBar.style.width);
+                const newWidth = currentWidth + 10;
+                progressBar.style.width = `${newWidth}%`;
+                progressBar.setAttribute('aria-valuenow', newWidth);
+            }, 1000);
+
+            try {
+                const response = await fetch(url);
+                const html = await response.text();
+                const links = [...new Set(html.match(/https?:\/\/[^\s"']+/g) || [])];
+                const relativeLinks = [...new Set(html.match(/<a\s+href="([^"]+)"/g) || [])].map(link => link.replace(/<a\s+href="([^"]+)"/g, '$1'));
+                const baseUrl = new URL(url).origin;
+                const allLinks = [
+                    ...links.filter(link => !commonLibraryNames.some(name => link.includes(name))),
+                    ...relativeLinks.filter(link => !commonLibraryNames.some(name => link.includes(name))).map(link => {
+                        if (/^https?:\/\//.test(link)) {
+                            return link;
+                        } else if (link.startsWith('/')) {
+                            return `${baseUrl}${link}`;
+                        } else {
+                            return `${baseUrl}/${link}`;
+                        }
+                    })
+                ];
+                urlsArea.value = allLinks.join('\n');
+                progressBar.style.width = '100%';
+                progressBar.setAttribute('aria-valuenow', 100);
+            } catch (error) {
+                console.error('Error scanning URLs:', error);
+                alert('无法获取网页内容。');
+            } finally {
+                clearInterval(interval);
+                scanProgress.classList.add('d-none');
+            }
+        }
+    </script>
+</body>
+</html>

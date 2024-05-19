@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>石头剪刀布</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+
+  <style>
+
+    .card {
+
+      margin: 20px 0;
+
+    }
+
+    .card-body {
+
+      text-align: center;
+
+    }
+
+    .hidden {
+
+      display: none;
+
+    }
+
+  </style>
+
+</head>
+
+
+   
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+    
+
+  <div class="container">
+
+    <div class="card">
+
+      <div class="card-body">
+
+        <h1 class="card-title">石头剪刀布</h1>
+
+        <p class="card-text">请选择你的出手:</p>
+
+        <div class="btn-group">
+
+          <button type="button" class="btn btn-primary choice" onclick="playGame(1)">剪刀</button>
+
+          <button type="button" class="btn btn-primary choice" onclick="playGame(2)">石头</button>
+
+          <button type="button" class="btn btn-primary choice" onclick="playGame(3)">布</button>
+
+        </div>
+
+        <div id="result" class="mt-3"></div>
+
+        <button type="button" class="btn btn-success mt-3" onclick="restartGame()">重新开始</button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+<script>
+    function loadHeaderContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("header-container").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "https://t.mg-tool.cn/header.php", true);
+        xhr.send();
+    }
+
+
+    function playGame(userChoice) {
+
+      const computerChoice = Math.floor(Math.random() * 3) + 1;
+
+      let result;
+
+
+
+      if (userChoice === computerChoice) {
+
+        result = "平局!";
+
+      } else if (
+
+        (userChoice === 1 && computerChoice === 3) ||
+
+        (userChoice === 2 && computerChoice === 1) ||
+
+        (userChoice === 3 && computerChoice === 2)
+
+      ) {
+
+        result = "你赢了!";
+
+      } else {
+
+        result = "你输了!";
+
+      }
+
+
+
+      const resultElement = document.getElementById("result");
+
+      resultElement.innerHTML = `你选择了${userChoice}, 电脑选择了${computerChoice}. ${result}`;
+
+
+
+      // 隐藏剪刀石头布的按钮
+
+      const choiceButtons = document.querySelectorAll(".choice");
+
+      choiceButtons.forEach(button => button.classList.add("hidden"));
+
+
+
+      // 显示重新开始按钮
+
+      const restartButton = document.querySelector(".btn-success");
+
+      restartButton.classList.remove("hidden");
+
+    }
+
+
+
+    function restartGame() {
+
+      // 显示剪刀石头布的按钮
+
+      const choiceButtons = document.querySelectorAll(".choice");
+
+      choiceButtons.forEach(button => button.classList.remove("hidden"));
+
+
+
+      // 隐藏重新开始按钮
+
+      const restartButton = document.querySelector(".btn-success");
+
+      restartButton.classList.add("hidden");
+
+
+
+      // 清空结果显示
+
+      const resultElement = document.getElementById("result");
+
+      resultElement.innerHTML = "";
+
+    }
+
+  </script>
+
+</body>
+
+</html>

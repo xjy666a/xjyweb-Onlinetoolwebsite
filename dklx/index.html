@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>贷款利息计算器</title>
+
+    <link rel="stylesheet" href="https://cdn.staticfile.net/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <style>
+
+        .form-group {
+
+            margin-bottom: 1rem;
+
+        }
+
+        .form-control {
+
+            margin-bottom: 0.5rem;
+
+        }
+
+        #result {
+
+            font-size: 1.5rem;
+
+            font-weight: bold;
+
+            margin-top: 1.5rem;
+
+        }
+
+    </style>
+
+</head>
+
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+    
+
+
+
+    <div class="container my-5">
+
+        <h1 class="text-center mb-4">贷款利息计算器</h1>
+
+        <div class="row justify-content-center">
+
+            <div class="col-md-6">
+
+                <form>
+
+                    <div class="form-group">
+
+                        <label for="loanAmount">贷款金额:</label>
+
+                        <input type="number" class="form-control" id="loanAmount" placeholder="请输入贷款金额">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="interestRate">年利率:</label>
+
+                        <input type="number" class="form-control" id="interestRate" placeholder="请输入年利率">
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="loanTerm">贷款期限(年):</label>
+
+                        <input type="number" class="form-control" id="loanTerm" placeholder="请输入贷款期限">
+
+                    </div>
+
+                    <button type="button" class="btn btn-primary btn-block" onclick="calculateLoanInterest()">计算利息</button>
+
+                </form>
+
+                <div id="result"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+<script>
+    function loadHeaderContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("header-container").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "https://t.mg-tool.cn/header.php", true);
+        xhr.send();
+    }
+
+        function calculateLoanInterest() {
+
+            const loanAmount = parseFloat(document.getElementById("loanAmount").value);
+
+            const interestRate = parseFloat(document.getElementById("interestRate").value) / 100;
+
+            const loanTerm = parseFloat(document.getElementById("loanTerm").value);
+
+
+
+            if (isNaN(loanAmount) || isNaN(interestRate) || isNaN(loanTerm)) {
+
+                document.getElementById("result").innerHTML = "请输入有效的数值。";
+
+                return;
+
+            }
+
+
+
+            const totalInterest = loanAmount * interestRate * loanTerm;
+
+            const totalAmount = loanAmount + totalInterest;
+
+
+
+            document.getElementById("result").innerHTML = `总利息: ${totalInterest.toFixed(2)} 元<br>总还款金额: ${totalAmount.toFixed(2)} 元`;
+
+        }
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+
+    <meta charset="UTF-8">
+
+    <title>扫雷游戏</title>
+
+    <style>
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            text-align: center;
+
+        }
+
+
+
+        #board {
+
+            display: inline-grid;
+
+            grid-template-columns: repeat(8, 30px);
+
+            grid-template-rows: repeat(8, 30px);
+
+            grid-gap: 1px;
+
+            background-color: #999;
+
+            padding: 10px;
+
+            border-radius: 10px;
+
+        }
+
+
+
+        .tile {
+
+            width: 30px;
+
+            height: 30px;
+
+            background-color: #bbb;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+        }
+
+
+
+        .tile.revealed {
+
+            background-color: #ccc;
+
+        }
+
+
+
+        button {
+
+            margin-top: 10px;
+
+        }
+
+    </style>
+
+</head>
+
+
+   
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+    
+
+    <h1>扫雷游戏</h1>
+
+    <div id="board"></div>
+
+    <button onclick="restartGame()">重新开始</button>
+
+<script>
+    function loadHeaderContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("header-container").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "https://t.mg-tool.cn/header.php", true);
+        xhr.send();
+    }
+
+        const boardSize = 8;
+
+        const mines = 10;
+
+        let tiles = [];
+
+        let minePositions = [];
+
+
+
+        // 初始化游戏板
+
+        function initBoard() {
+
+            const board = document.getElementById('board');
+
+            board.innerHTML = '';
+
+            tiles = [];
+
+            minePositions = placeMines();
+
+
+
+            for (let i = 0; i < boardSize * boardSize; i++) {
+
+                const tile = document.createElement('div');
+
+                tile.classList.add('tile');
+
+                tile.addEventListener('click', revealTile.bind(null, i));
+
+                tiles.push({
+
+                    id: i,
+
+                    isMine: minePositions.includes(i),
+
+                    isRevealed: false,
+
+                    element: tile
+
+                });
+
+                board.appendChild(tile);
+
+            }
+
+        }
+
+
+
+        // 随机布置地雷
+
+        function placeMines() {
+
+            const positions = [];
+
+            while (positions.length < mines) {
+
+                const randomIndex = Math.floor(Math.random() * boardSize * boardSize);
+
+                if (!positions.includes(randomIndex)) {
+
+                    positions.push(randomIndex);
+
+                }
+
+            }
+
+            return positions;
+
+        }
+
+
+
+        // 显示指定位置的方格
+
+        function revealTile(index) {
+
+            const tile = tiles[index];
+
+            if (!tile.isRevealed) {
+
+                tile.isRevealed = true;
+
+                tile.element.classList.add('revealed');
+
+                if (tile.isMine) {
+
+                    tile.element.textContent = '💣';
+
+                    alert('游戏结束!');
+
+                } else {
+
+                    const surroundingMines = countSurroundingMines(index);
+
+                    if (surroundingMines > 0) {
+
+                        tile.element.textContent = surroundingMines;
+
+                    }
+
+                }
+
+            }
+
+        }
+
+
+
+        // 计算指定位置周围的地雷数量
+
+        function countSurroundingMines(index) {
+
+            let count = 0;
+
+            const row = Math.floor(index / boardSize);
+
+            const col = index % boardSize;
+
+
+
+            for (let i = Math.max(row - 1, 0); i <= Math.min(row + 1, boardSize - 1); i++) {
+
+                for (let j = Math.max(col - 1, 0); j <= Math.min(col + 1, boardSize - 1); j++) {
+
+                    if (i !== row || j !== col) {
+
+                        const tileIndex = i * boardSize + j;
+
+                        if (tiles[tileIndex].isMine) {
+
+                            count++;
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+
+
+            return count;
+
+        }
+
+
+
+        // 重新开始游戏
+
+        function restartGame() {
+
+            initBoard();
+
+        }
+
+
+
+        // 初始化游戏
+
+        initBoard();
+
+    </script>
+
+</body>
+
+</html>

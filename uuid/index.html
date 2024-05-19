@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>进制转换和UUID生成器</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.net/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+
+  <style>
+
+    .card {
+
+      margin-bottom: 20px;
+
+    }
+
+  </style>
+
+</head>
+
+
+   
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+    
+
+  <div class="container">
+
+    <h1 class="text-center my-4">进制转换和UUID生成器</h1>
+
+    <div class="row">
+
+      <div class="col-md-6">
+
+        <div class="card">
+
+          <div class="card-header">
+
+            进制转换
+
+          </div>
+
+          <div class="card-body">
+
+            <div class="form-group">
+
+              <label for="baseInput">输入进制:</label>
+
+              <input type="number" class="form-control" id="baseInput" min="2" max="36" value="10">
+
+            </div>
+
+            <div class="form-group">
+
+              <label for="numberInput">输入数字:</label>
+
+              <input type="text" class="form-control" id="numberInput" value="123">
+
+            </div>
+
+            <div class="form-group">
+
+              <label for="targetBase">目标进制:</label>
+
+              <input type="number" class="form-control" id="targetBase" min="2" max="36" value="2">
+
+            </div>
+
+            <button class="btn btn-primary" onclick="convertBase()">转换</button>
+
+            <div class="mt-3">
+
+              <label for="resultInput">结果:</label>
+
+              <input type="text" class="form-control" id="resultInput" disabled>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="col-md-6">
+
+        <div class="card">
+
+          <div class="card-header">
+
+            UUID生成器
+
+          </div>
+
+          <div class="card-body">
+
+            <button class="btn btn-primary" onclick="generateUUID()">生成UUID</button>
+
+            <div class="mt-3">
+
+              <label for="uuidInput">UUID:</label>
+
+              <input type="text" class="form-control" id="uuidInput" disabled>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+<script>
+    function loadHeaderContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("header-container").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "https://t.mg-tool.cn/header.php", true);
+        xhr.send();
+    }
+
+    function convertBase() {
+
+      const baseInput = document.getElementById('baseInput').value;
+
+      const numberInput = document.getElementById('numberInput').value;
+
+      const targetBase = document.getElementById('targetBase').value;
+
+      const resultInput = document.getElementById('resultInput');
+
+
+
+      const decimalValue = parseInt(numberInput, baseInput);
+
+      const result = decimalValue.toString(targetBase);
+
+
+
+      resultInput.value = result;
+
+    }
+
+
+
+    function generateUUID() {
+
+      const uuidInput = document.getElementById('uuidInput');
+
+      const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+
+        const r = Math.random() * 16 | 0;
+
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+
+        return v.toString(16);
+
+      });
+
+
+
+      uuidInput.value = uuid;
+
+    }
+
+  </script>
+
+</body>
+
+</html>

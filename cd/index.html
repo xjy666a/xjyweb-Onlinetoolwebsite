@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>中国历史朝代</title>
+
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <style>
+
+        .card-body {
+
+            text-align: left;
+
+        }
+
+    </style>
+
+</head>
+
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+    
+
+
+
+    <div id="app">
+
+        <div class="container mt-5">
+
+            <h1 class="text-center mb-5">中国历史朝代</h1>
+
+            <div class="row">
+
+                <div class="col-md-4 mb-4" v-for="dynasty in dynasties">
+
+                    <div class="card">
+
+                        <div class="card-body">
+
+                            <h5 class="card-title">{{ dynasty.name }}</h5>
+
+                            <p class="card-text">{{ dynasty.period }}</p>
+
+                            <p class="card-text"><strong>都城:</strong> {{ dynasty.capital }}</p>
+
+                            <p class="card-text"><strong>都城今址:</strong> {{ dynasty.currentLocation }}</p>
+
+                            <p class="card-text"><strong>建立者:</strong> {{ dynasty.founder }}</p>
+
+                            
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+   <p>中国历史朝代歌
+
+版本一
+
+三皇五帝夏商周，秦汉三国两晋忧。
+
+南北隋唐五代尽，宋元明清帝统休。
+
+
+
+版本二
+
+黄尧舜禹夏商周，春秋秦汉又三国。
+
+两晋南北隋唐起，五代十国宋辽金，元明清后皇朝止。
+
+
+
+版本三
+
+夏商周，春秋战
+
+秦朝以后是两汉
+
+三国两晋南北朝
+
+隋唐五代宋夏辽
+
+金元明清二十朝
+
+
+
+人教版
+
+三皇五帝始，尧舜禹相传。
+
+夏商与西周，东周分两段。
+
+春秋和战国，一统秦两汉。
+
+三分魏蜀吴，两晋前后延。
+
+南北朝并立，隋唐五代传。
+
+宋元明清后，皇朝至此完。<p>     
+
+
+
+    <script src="https://cdn.staticfile.net/vue/2.7.9/vue.js"></script>
+
+    <script>
+    function loadHeaderContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("header-container").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "https://t.mg-tool.cn/header.php", true);
+        xhr.send();
+    }
+
+        var app = new Vue({
+
+            el: '#app',
+
+            data: {
+
+    dynasties: [
+
+        {name: '夏朝', period: '约前2070年—约前1600年', capital: '阳城、阳翟、斟鄩、商丘、纶城、帝丘、原、老丘、西河', currentLocation: '河南郑州、许昌、洛阳、商丘、濮阳、济源、开封', founder: '禹 （一说启） '},
+
+        {name: '商朝', period: '约前1600年—约前1046年', capital: '亳、西亳、嚣、相、邢、殷、朝歌', currentLocation: '河南商丘、洛阳、郑州、安阳、焦作、鹤壁、河北邢台', founder: '商汤'},
+
+        {name: '西周', period: '约前1046年—前771年', capital: '镐京、成周', currentLocation: '陕西西安、河南洛阳', founder: '周武王姬发'},
+
+        {name: '东周', period: '东周：前770年—前256年（春秋：前770年—前476年；战国：前475年—前221年）', capital: '洛邑', currentLocation: '河南洛阳', founder: '周平王姬宜臼'},
+
+        {name: '秦朝', period: '前221年—前207年', capital: '咸阳', currentLocation: '陕西咸阳 ', founder: '秦始皇帝嬴政'},
+
+        {name: '西汉', period: '前202年—8年', capital: '长安', currentLocation: '陕西西安', founder: '汉高祖刘邦'},
+
+        {name: '新朝', period: '9年—23年', capital: '常安', currentLocation: '陕西西安', founder: '建兴帝王莽'},
+
+        {name: '玄汉', period: '23年—25年', capital: '南阳、洛阳、长安', currentLocation: '河南南阳、河南洛阳、陕西西安', founder: '汉更始帝刘玄'},
+
+        {name: '东汉', period: '25年—220年', capital: '洛阳、许昌、长安', currentLocation: '河南洛阳', founder: '汉世祖刘秀'},
+
+        {name: '曹魏', period: '220年—265年', capital: '洛阳', currentLocation: '河南洛阳', founder: '魏文帝曹丕'},
+
+        {name: '蜀汉', period: '221年—263年', capital: '成都', currentLocation: '四川成都', founder: '汉烈祖刘备'},
+
+        {name: '孙吴', period: '222年—280年', capital: '建业', currentLocation: '江苏南京', founder: '吴大帝孙权'},
+
+        {name: '西晋', period: '266年—317年', capital: '洛阳', currentLocation: '河南洛阳', founder: '晋武帝司马炎'},
+
+        {name: '东晋', period: '317年—420年', capital: '建康', currentLocation: '江苏南京', founder: '晋元帝司马睿'},
+
+        {name: '刘宋', period: '420年—479年', capital: '建康', currentLocation: '江苏南京', founder: '宋武帝刘裕'},
+
+        {name: '南齐', period: '479年—502年', capital: '建康', currentLocation: '江苏南京', founder: '齐高帝萧道成'},
+
+        {name: '南梁', period: '502年—557年', capital: '建康', currentLocation: '江苏南京', founder: '梁武帝萧衍'},
+
+        {name: '南陈', period: '557年—589年', capital: '建康', currentLocation: '江苏南京', founder: '陈武帝陈霸先'},
+
+        {name: '北魏', period: '386年—534年', capital: '平城、洛阳', currentLocation: '山西大同、河南洛阳', founder: '道武帝拓跋珪'},
+
+        {name: '东魏', period: '534年—550年', capital: '邺城', currentLocation: '河南安阳、河北临漳', founder: '魏孝静帝元善见'},
+
+        {name: '北齐', period: '550年—577年', capital: '邺城', currentLocation: '河南安阳、河北临漳', founder: '齐文宣帝高洋'},
+
+        {name: '西魏', period: '535年—557年', capital: '长安', currentLocation: '陕西西安', founder: '魏文帝元宝炬'},
+
+        {name: '北周', period: '557年—581年', capital: '长安', currentLocation: '陕西西安', founder: '周孝闵帝宇文觉'},
+
+        {name: '隋朝', period: '581年—618年', capital: '大兴城、洛阳', currentLocation: '陕西西安、河南洛阳', founder: '隋文帝杨坚'},
+
+        {name: '唐朝「前期」', period: '618年—690年', capital: '长安', currentLocation: '陕西西安、河南洛阳', founder: '唐高祖李渊'},
+
+        {name: '武周', period: '690年—705年', capital: '神都、洛阳', currentLocation: '河南洛阳', founder: '圣神皇帝武则天'},
+
+        {name: '唐朝「中后期」', period: '705年—907年', capital: '长安、洛阳', currentLocation: '陕西西安、河南洛阳', founder: '唐中宗李显'},
+
+        {name: '后梁', period: '907年—923年', capital: '开封府', currentLocation: '河南开封、河南洛阳', founder: '梁太祖朱温'},
+
+        {name: '后唐', period: '923年—936年', capital: '河南府', currentLocation: '河南洛阳', founder: '唐庄宗李存勖'},
+
+        {name: '后晋', period: '936年—947年', capital: '开封府', currentLocation: '河南洛阳、河南开封', founder: '晋高祖石敬瑭'},
+
+        {name: '后汉', period: '947年—951年', capital: '开封府', currentLocation: '河南开封', founder: '汉高祖刘知远'},
+
+        {name: '后周', period: '951年—960年', capital: '开封府', currentLocation: '河南开封', founder: '周太祖郭威'},
+
+        {name: '南吴', period: '902年—937年', capital: '东都江都府、西都金陵府', currentLocation: '江苏扬州、江苏南京', founder: '南吴太祖杨行密'},
+
+        {name: '南唐', period: '937年—975年', capital: '江宁府', currentLocation: '江苏南京', founder: '唐烈祖李昪'},
+
+        {name: '前蜀', period: '907年—925年', capital: '成都', currentLocation: '四川成都', founder: '前蜀高祖王建'},
+
+{name: '后蜀', period: '933年—966年', capital: '成都', currentLocation: '四川成都', founder: '后蜀高祖孟知祥'},
+
+{name: '南汉', period: '917年—971年', capital: '兴王府', currentLocation: '广东广州', founder: '南汉高祖刘龑'},
+
+{name: '南楚', period: '907年—951年', capital: '长沙府', currentLocation: '湖南长沙', founder: '楚武穆王马殷'},
+
+{name: '吴越', period: '907年—978年', capital: '杭州、越州', currentLocation: '浙江杭州', founder: '吴越太祖钱镠'},
+
+{name: '闽国', period: '909年—945年', capital: '长乐府、建州', currentLocation: '福建福州、福建建瓯', founder: '闽太祖王审知'},
+
+{name: '荆南', period: '924年—963年', capital: '江陵府', currentLocation: '湖北秭归', founder: '楚武信王高季兴'},
+
+{name: '北汉', period: '951年—979年', capital: '太原府', currentLocation: '山西太原', founder: '北汉世祖刘崇'},
+
+{name: '北宋', period: '960年—1127年', capital: '开封府', currentLocation: '河南开封', founder: '宋太祖赵匡胤'},
+
+{name: '南宋', period: '1127年—1279年', capital: '应天府、临安府', currentLocation: '河南商丘、浙江杭州', founder: '宋高宗赵构'},
+
+{name: '辽朝', period: '907年—1125年', capital: '临潢府、开封府', currentLocation: '内蒙古巴林左旗、河南开封', founder: '辽太祖耶律阿保机'},
+
+{name: '西夏', period: '1038年—1227年', capital: '兴庆府', currentLocation: '宁夏银川', founder: '夏景宗李元昊'},
+
+{name: '金朝', period: '1115年—1234年', capital: '大兴府、会宁府、开封府', currentLocation: '北京、黑龙江哈尔滨、河南开封', founder: '金太祖完颜阿骨打'},
+
+{name: '元朝', period: '1271年—1368年', capital: '大都路', currentLocation: '北京', founder: '元世祖忽必烈'},
+
+{name: '明朝', period: '1368年—1644年', capital: '应天府、顺天府', currentLocation: '江苏南京、北京', founder: '明太祖朱元璋'},
+
+{name: '清朝', period: '1616年 （一说1644年 ）—1911年', capital: '奉天府、顺天府', currentLocation: '辽宁沈阳、北京', founder: '清太祖爱新觉罗·努尔哈赤'}         
+
+                    // 添加其他朝代...
+
+                ]
+
+            }
+
+        })
+
+    </script>
+
+</body>
+
+</html>

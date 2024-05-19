@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>国家首都查询</title>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+  <style>
+    .card {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+
+   
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+    
+  <div class="container my-5">
+    <div class="card">
+      <div class="card-header">
+        <h4 class="card-title">国家首都查询</h4>
+      </div>
+      <div class="card-body">
+        <input type="text" class="form-control mb-3" id="searchInput" placeholder="输入国家名或首都名">
+        <div class="result"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function loadHeaderContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("header-container").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "https://t.mg-tool.cn/header.php", true);
+        xhr.send();
+    }
+    const countryCapitals = {
+"阿富汗": ["喀布尔", "Kabul"],
+  "阿尔巴尼亚": ["地拉那", "Tirana"],
+  "阿尔及利亚": ["阿尔及尔", "Algiers"],
+  "安道尔": ["安道尔城", "Andorra la Vella"],
+  "安哥拉": ["罗安达", "Luanda"],
+  "安提瓜和巴布达": ["圣约翰", "St. John's"],
+  "阿根廷": ["布宜诺斯艾利斯", "Buenos Aires"],
+  "亚美尼亚": ["埃里温", "Yerevan"],
+  "澳大利亚": ["堪培拉", "Canberra"],
+  "奥地利": ["维也纳", "Vienna"],
+  "阿塞拜疆": ["巴库", "Baku"],
+  "巴哈马": ["拿骚", "Nassau"],
+  "巴林": ["麦纳麦", "Manama"],
+  "孟加拉国": ["达卡", "Dhaka"],
+  "巴巴多斯": ["布里奇敦", "Bridgetown"],
+  "白俄罗斯": ["明斯克", "Minsk"],
+  "比利时": ["布鲁塞尔", "Brussels"],
+  "伯利兹": ["伯利兹城", "Belmopan"],
+  "贝宁": ["Portsmouth", "Portsmouth"],
+  "不丹": ["廷布", "Thimphu"],
+  "玻利维亚": ["拉巴斯", "La Paz"],
+  "波斯尼亚和黑塞哥维那": ["萨拉热窝", "Sarajevo"],
+  "博茨瓦纳": ["哈博罗内", "Gaborone"],
+  "巴西": ["巴西利亚", "Brasília"],
+  "文莱": ["bandar seri begawan", "Bandar Seri Begawan"],
+  "保加利亚": ["索非亚", "Sofia"],
+  "布基纳法索": ["瓦加杜古", "Ouagadougou"],
+  "缅甸": ["内比都", "Naypyidaw"],
+  "布隆迪": ["布真芝", "Gitega"],
+  "柬埔寨": ["金边", "Phnom Penh"],
+  "喀麦隆": ["亚温得", "Yaoundé"],
+  "加拿大": ["渥太华", "Ottawa"],
+  "佛得角": ["普赖亚", "Praia"],
+  "中非共和国": ["班吉", "Bangui"],
+  "乍得": ["恩加美纳", "N'Djamena"],
+  "智利": ["圣地亚哥", "Santiago"],
+  "中国": ["北京", "Beijing"],
+  "哥伦比亚": ["波哥大", "Bogotá"],
+  "科摩罗": ["莫罗尼", "Moroni"],
+  "刚果(布)": ["布拉柴维尔", "Brazzaville"],
+  "刚果(金)": ["着丽", "Kinshasa"],
+  "哥斯达黎加": ["圣何塞", "San José"],
+  "科特迪瓦": ["亚穆苏克罗", "Yamoussoukro"],
+  "克罗地亚": ["萨格勒布", "Zagreb"],
+  "古巴": ["哈瓦那", "Havana"],
+  "塞浦路斯": ["尼科西亚", "Nicosia"],
+  "捷克": ["布拉格", "Prague"],
+  "丹麦": ["哥本哈根", "Copenhagen"],
+  "吉布提": ["吉布提市", "Djibouti"],
+  "多米尼加": ["罗索", "Roseau"],
+  "多米尼加共和国": ["圣多明各", "Santo Domingo"],
+  "厄瓜多尔": ["基多", "Quito"],
+  "埃及": ["开罗", "Cairo"],
+  "萨尔瓦多": ["圣萨尔瓦多", "San Salvador"],
+  "赤道几内亚": ["马拉博", "Malabo"],
+  "厄立特里亚": ["阿斯马拉", "Asmara"],
+  "爱沙尼亚": ["塔林", "Tallinn"],
+  "斯威士兰": ["姆巴巴纳", "Mbabane"],
+  "埃塞俄比亚": ["亚的斯亚贝巴", "Addis Ababa"],
+  "斐济": ["苏瓦", "Suva"],
+  "芬兰": ["赫尔辛基", "Helsinki"],
+  "法国": ["巴黎", "Paris"],
+  "加蓬": ["利伯维尔", "Libreville"],
+  "冈比亚": ["班珠尔", "Banjul"],
+  "格鲁吉亚": ["第比利斯", "Tbilisi"],
+  "德国": ["柏林", "Berlin"],
+  "加纳": ["阿克拉", "Accra"],
+  "希腊": ["雅典", "Athens"],
+  "格林纳达": ["圣乔治", "St. George's"],
+  "危地马拉": ["危地马拉城", "Guatemala City"],
+  "几内亚": ["科纳克里", "Conakry"],
+  "几内亚比绍": ["比绍", "Bissau"],
+  "圭亚那": ["格乔治敦", "Georgetown"],
+  "海地": ["太子港", "Port-au-Prince"],
+  "洪都拉斯": ["的哥苏拉", "Tegucigalpa"],
+  "匈牙利": ["布达佩斯", "Budapest"],
+  "冰岛": ["雷克雅未克", "Reykjavík"],
+  "印度": ["新德里", "New Delhi"],
+  "印度尼西亚": ["雅加达", "Jakarta"],
+  "伊朗": ["德黑兰", "Tehran"],
+  "伊拉克": ["巴格达", "Baghdad"],
+  "爱尔兰": ["都柏林", "Dublin"],
+  "以色列": ["耶路撒冷", "Jerusalem"],
+  "意大利": ["罗马", "Rome"],
+  "牙买加": ["金斯敦", "Kingston"],
+  "日本": ["东京", "Tokyo"],
+  "约旦": ["安曼", "Amman"],
+  "哈萨克斯坦": ["阿斯塔纳", "Astana"],
+  "肯尼亚": ["内罗毕", "Nairobi"],
+  "基里巴斯": ["塔拉瓦", "Tarawa"],
+  "朝鲜": ["平壤", "Pyongyang"],
+  "科威特": ["科威特城", "Kuwait City"],
+  "吉尔吉斯斯坦": ["比什凯克", "Bishkek"],
+  "老挝": ["万象", "Vientiane"],
+"拉脱维亚": ["里加", "Riga"],
+  "黎巴嫩": ["贝鲁特", "Beirut"],
+  "莱索托": ["马塞卢", "Maseru"],
+  "利比里亚": ["蒙罗维亚", "Monrovia"],
+  "利比亚": ["的黎波里", "Tripoli"],
+  "列支敦士登": ["法度士", "Vaduz"],
+  "立陶宛": ["维尔纽斯", "Vilnius"],
+  "卢森堡": ["卢森堡城", "Luxembourg"],
+  "马达加斯加": ["安塔那那利佛", "Antananarivo"],
+  "马拉维": ["利隆圭", "Lilongwe"],
+  "马来西亚": ["吉隆坡", "Kuala Lumpur"],
+  "马尔代夫": ["马累", "Malé"],
+  "马里": ["바마코", "Bamako"],
+  "马耳他": ["瓦莱塔", "Valletta"],
+  "马绍尔群岛": ["马朱罗", "Majuro"],
+  "毛里塔尼亚": ["努瓦克肖特", "Nouakchott"],
+  "毛里求斯": ["路易港", "Port Louis"],
+  "墨西哥": ["墨西哥城", "Mexico City"],
+  "密克罗尼西亚": ["帕利克尔", "Palikir"],
+  "摩尔多瓦": ["基希讷乌", "Chișinău"],
+  "摩纳哥": ["摩纳哥城", "Monaco"],
+  "蒙古": ["乌兰巴托", "Ulaanbaatar"],
+  "黑山": ["波德戈里察", "Podgorica"],
+  "摩洛哥": ["拉巴特", "Rabat"],
+  "莫桑比克": ["马普托", "Maputo"],
+  "纳米比亚": ["温得和克", "Windhoek"],
+  "瑙鲁": ["亚伦", "Yaren"],
+  "尼泊尔": ["加德满都", "Kathmandu"],
+  "荷兰": ["阿姆斯特丹", "Amsterdam"],
+  "新西兰": ["惠灵顿", "Wellington"],
+  "尼加拉瓜": ["马那瓜", "Managua"],
+  "尼日尔": ["尼亚美", "Niamey"],
+  "尼日利亚": ["阿布加", "Abuja"],
+  "北马其顿": ["斯科普里", "Skopje"],
+  "挪威": ["奥斯陆", "Oslo"],
+  "阿曼": ["马斯喀特", "Muscat"],
+  "巴基斯坦": ["伊斯兰堡", "Islamabad"],
+  "巴劳": ["恩格尔梅丹", "Ngerulmud"],
+  "巴勒斯坦": ["拉马拉", "Ramallah"],
+  "巴拿马": ["巴拿马城", "Panama City"],
+  "巴布亚新几内亚": ["莫尔兹比港", "Port Moresby"],
+  "巴拉圭": ["阿松森", "Asunción"],
+  "秘鲁": ["利马", "Lima"],
+  "菲律宾": ["马尼拉", "Manila"],
+  "波兰": ["华沙", "Warsaw"],
+  "葡萄牙": ["里斯本", "Lisbon"],
+  "卡塔尔": ["多哈", "Doha"],
+  "罗马尼亚": ["布加勒斯特", "Bucharest"],
+  "俄罗斯": ["莫斯科", "Moscow"],
+  "卢旺达": ["基加利", "Kigali"],
+  "圣基茨和尼维斯": ["巴斯特", "Basseterre"],
+  "圣卢西亚": ["卡斯特里斯", "Castries"],
+  "圣马力诺": ["圣马力诺", "San Marino"],
+  "圣文森特和格林纳丁斯": ["金斯敦", "Kingstown"],
+  "萨摩亚": ["阿皮亚", "Apia"],
+  "圣多美和普林西比": ["圣多美", "São Tomé"],
+  "沙特阿拉伯": ["利雅得", "Riyadh"],
+  "塞内加尔": ["达喀尔", "Dakar"],
+  "塞尔维亚": ["贝尔格拉德", "Belgrade"],
+  "塞舌尔": ["维多利亚", "Victoria"],
+  "塞拉利昂": ["弗里敦", "Freetown"],
+  "新加坡": ["新加坡", "Singapore"],
+  "斯洛伐克": ["布拉迪斯拉发", "Bratislava"],
+  "斯洛文尼亚": ["卢布尔雅那", "Ljubljana"],
+  "所罗门群岛": ["霍尼亚拉", "Honiara"],
+  "索马里": ["摩加迪沙", "Mogadishu"],
+  "南非": ["比勒陀利亚", "Pretoria"]
+    };
+
+    const searchInput = document.getElementById("searchInput");
+    const resultDiv = document.querySelector(".result");
+
+    searchInput.addEventListener("input", function() {
+      const searchTerm = this.value.trim().toLowerCase();
+      let result = "";
+
+      for (const [country, capitals] of Object.entries(countryCapitals)) {
+        const countryLower = country.toLowerCase();
+        const capitalChinese = capitals[0].toLowerCase();
+        const capitalEnglish = capitals[1].toLowerCase();
+
+        if (countryLower.includes(searchTerm) || capitalChinese.includes(searchTerm) || capitalEnglish.includes(searchTerm)) {
+          result += `<p>${country}: ${capitals[0]} (${capitals[1]})</p>`;
+        }
+      }
+
+      if (result === "") {
+        result = "<p>没有找到匹配的国家或首都</p>";
+      }
+
+      resultDiv.innerHTML = result;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,3 @@
+中国|北京|Beijing
+美国|华盛顿|Washington D.C.
+日本|东京|Tokyo

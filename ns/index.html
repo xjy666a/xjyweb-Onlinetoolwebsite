@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+        <meta charset="utf-8">
+    <title>英语与Numberish相互转换器</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .card {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .form-control {
+            border-radius: 0;
+        }
+        .btn {
+            border-radius: 0;
+        }
+    </style>
+</head>
+
+   
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+    
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">英语与Numberish相互转换器</h1>
+                <h5 class="mt-4">Numberish是一种人工创造的语言,使用数字和特殊符号作为字母表。以下是一些基本规则:</h5>
+                <ul>
+                    <li>字母发音规则:a → 1 (发音类似英语"of"的元音)</li>
+                    <li>e → 2 (发音类似英语"he"的元音)</li>
+                    <li>i → 3 (发音类似英语"she"的元音)</li>
+                    <li>o → 4 (发音类似英语"app"的元音)</li>
+                    <li>u → 5 (发音类似英语"int"的元音)</li>
+                    <li>其他字母发音与英语一致。</li>
+                </ul>
+                <h5 class="mt-4">标音规则:</h5>
+                <ul>
+                    <li>1添加声调6(升调)</li>
+                    <li>2添加声调7(颤音)</li>
+                    <li>3添加声调8(舌尖音)</li>
+                    <li>4添加声调9(降音)</li>
+                    <li>5添加声调0(轻声)</li>
+                </ul>
+                <h5 class="mt-4">时态变化规则:</h5>
+                <ul>
+                    <li>对英语中现在进行时和一般现在时,句子不变;</li>
+                    <li>一般过去式,过去进行时,在句首添加e:;</li>
+                    <li>一般将来时,将来进行时,在句首添加j:</li>
+                </ul>
+                <div class="form-group">
+                    <textarea class="form-control" id="input-text" placeholder="在这里输入英语或Numberish..." rows="5"></textarea>
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <button class="btn btn-primary" id="convert-btn">转换</button>
+                    <span class="text-danger">注意: 由于技术限制,时态转换和标音规则可能存在问题,如有问题请自行修改。</span>
+                </div>
+                <div class="form-group mt-3">
+                    <textarea class="form-control" id="output-text" placeholder="转换结果将显示在这里..." rows="5" readonly></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function loadHeaderContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("header-container").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "https://t.mg-tool.cn/header.php", true);
+        xhr.send();
+    }
+        const inputText = document.getElementById('input-text');
+
+        const outputText = document.getElementById('output-text');
+
+        const convertBtn = document.getElementById('convert-btn');
+
+
+
+        const numberishAlphabet = {
+
+            'a': '1(6)', 'b': '@', 'c': '&', 'd': '#', 'e': '2(7)', 'f': '!', 'g': '$', 'h': '^',
+
+            'i': '3(8)', 'j': '*', 'k': '+', 'l': '=', 'm': '%', 'n': '-', 'o': '4(9)', 'p': '|',
+
+            'q': '?', 'r': '~', 's': '△', 't': ';', 'u': '5(0)', 'v': ':', 'w': '.', 'x': '<',
+
+            'y': '>', 'z': '/' , '&nbsp;':'&nbsp;' , '&ensp;': '&ensp;'
+
+        };
+
+
+
+        const tones = {
+
+            '1': '(6)', '2': '(7)', '3': '(8)', '4': '(9)', '5': '(0)'
+
+        };
+
+
+
+        function convertToNumberish(englishText) {
+
+            let numberishText = '';
+
+            const words = englishText.toLowerCase().split(' ');
+
+
+
+            for (let word of words) {
+
+                let numberishWord = '';
+
+                let prevChar = '';
+
+                for (let char of word) {
+
+                    if (isVowel(char)) {
+
+                        const vowel = numberishAlphabet[char];
+
+                        const tone = tones[vowel];
+
+                        numberishWord += prevChar !== '' ? vowel + tone : vowel + tone;
+
+                    } else {
+
+                        numberishWord += numberishAlphabet[char];
+
+                        prevChar = numberishAlphabet[char];
+
+                    }
+
+                }
+
+                numberishText += numberishWord + ' ';
+
+            }
+
+
+
+            return numberishText.trim();
+
+        }
+
+
+
+        function convertToEnglish(numberishText) {
+
+            let englishText = '';
+
+            const words = numberishText.split(' ');
+
+
+
+            for (let word of words) {
+
+                let englishWord = '';
+
+                let prevChar = '';
+
+                for (let char of word) {
+
+                    if (isVowel(char)) {
+
+                        const vowelIndex = Object.values(numberishAlphabet).indexOf(char);
+
+                        const vowel = Object.keys(numberishAlphabet)[vowelIndex];
+
+                        englishWord += prevChar !== '' ? vowel : vowel;
+
+                    } else {
+
+                        const consonantIndex = Object.values(numberishAlphabet).indexOf(char);
+
+                        const consonant = Object.keys(numberishAlphabet)[consonantIndex];
+
+                        englishWord += consonant;
+
+                        prevChar = consonant;
+
+                    }
+
+                }
+
+                englishText += englishWord + ' ';
+
+            }
+
+
+
+            return englishText.trim();
+
+        }
+
+
+
+        function isVowel(char) {
+
+            return ['a', 'e', 'i', 'o', 'u'].includes(Object.keys(numberishAlphabet)[Object.values(numberishAlphabet).indexOf(char)]);
+
+        }
+
+
+
+        convertBtn.addEventListener('click', () => {
+
+            const inputString = inputText.value;
+
+            const isEnglish = /^[a-zA-Z\s]+$/.test(inputString);
+
+            let outputString;
+
+
+
+            if (isEnglish) {
+
+                outputString = convertToNumberish(inputString);
+
+            } else {
+
+                outputString = convertToEnglish(inputString);
+
+            }
+
+
+
+            outputText.value = outputString;
+
+        });
+
+    </script>
+
+</body>
+
+</html>

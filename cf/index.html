@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>内容重复率检测</title>
+
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <style>
+
+        .highlight {
+
+            background-color: yellow;
+
+        }
+
+    </style>
+
+</head>
+
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+    
+
+
+
+    <div class="container my-5">
+
+        <div class="card">
+
+            <div class="card-header">
+
+                <h3>内容重复率检测</h3>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="form-group">
+
+                    <label for="text1">文本 1:</label>
+
+                    <textarea class="form-control" id="text1" rows="5"></textarea>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="text2">文本 2:</label>
+
+                    <textarea class="form-control" id="text2" rows="5"></textarea>
+
+                </div>
+
+                <button class="btn btn-primary" onclick="checkDuplication()">检测重复内容</button>
+
+            </div>
+
+            <div class="card-footer">
+
+                <p id="result"></p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+ <script>
+    function loadHeaderContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("header-container").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "https://t.mg-tool.cn/header.php", true);
+        xhr.send();
+    }
+
+        function checkDuplication() {
+
+            const text1 = document.getElementById('text1').value;
+
+            const text2 = document.getElementById('text2').value;
+
+
+
+            // 如果两个文本完全相同,直接返回 100% 重复率
+
+            if (text1 === text2) {
+
+                const resultElement = document.getElementById('result');
+
+                resultElement.innerHTML = `
+
+                    <p>文本 1 (高亮显示重复内容):</p>
+
+                    <p><span class="highlight">${text1}</span></p>
+
+                    <p>文本 2 (高亮显示重复内容):</p>
+
+                    <p><span class="highlight">${text2}</span></p>
+
+                    <p>重复率: 100.00%</p>
+
+                    <p>非重复率: 0.00%</p>
+
+                `;
+
+                return;
+
+            }
+
+
+
+            // 创建字符计数映射
+
+            const charCount1 = {};
+
+            const charCount2 = {};
+
+
+
+            // 计算字符出现次数
+
+            for (const char of text1) {
+
+                charCount1[char] = (charCount1[char] || 0) + 1;
+
+            }
+
+            for (const char of text2) {
+
+                charCount2[char] = (charCount2[char] || 0) + 1;
+
+            }
+
+
+
+            // 计算重复字符数
+
+            let duplicateCount = 0;
+
+            for (const char in charCount1) {
+
+                if (charCount2[char]) {
+
+                    duplicateCount += Math.min(charCount1[char], charCount2[char]);
+
+                }
+
+            }
+
+
+
+            // 计算总字符数
+
+            const totalChars = text1.length + text2.length;
+
+
+
+            // 计算非重复字符数
+
+            const nonDuplicateCount = totalChars - duplicateCount;
+
+
+
+            // 计算重复率
+
+            const duplicateRate = (duplicateCount / totalChars) * 100;
+
+            const nonDuplicateRate = (nonDuplicateCount / totalChars) * 100;
+
+
+
+            // 高亮显示重复内容
+
+            const highlightedText1 = highlightText(text1, charCount2);
+
+            const highlightedText2 = highlightText(text2, charCount1);
+
+
+
+            // 显示结果
+
+            const resultElement = document.getElementById('result');
+
+            resultElement.innerHTML = `
+
+                <p>文本 1 (高亮显示重复内容):</p>
+
+                <p>${highlightedText1}</p>
+
+                <p>文本 2 (高亮显示重复内容):</p>
+
+                <p>${highlightedText2}</p>
+
+                <p>重复率: ${duplicateRate.toFixed(2)}%</p>
+
+                <p>非重复率: ${nonDuplicateRate.toFixed(2)}%</p>
+
+            `;
+
+        }
+
+
+
+        function highlightText(text, charCount) {
+
+            let highlightedText = '';
+
+            for (const char of text) {
+
+                if (charCount[char]) {
+
+                    highlightedText += `<span class="highlight">${char}</span>`;
+
+                } else {
+
+                    highlightedText += char;
+
+                }
+
+            }
+
+            return highlightedText;
+
+        }
+
+    </script>
+
+</body>
+
+</html>

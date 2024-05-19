@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+<head>
+  <title>抑郁、焦虑和压力测试</title>
+  <link rel="stylesheet" href="https://cdn.staticfile.net/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+  <style>
+    .card {
+      margin-top: 20px;
+    }
+
+    .option {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .option input[type="radio"] {
+      opacity: 0;
+      position: absolute;
+    }
+
+    .option label {
+      padding-left: 30px;
+      position: relative;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .option label:before {
+      content: "";
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+      position: absolute;
+      left: 0;
+      bottom: 1px;
+      background-color: #e9e9e9;
+      border-radius: 50%;
+    }
+
+    .option input[type="radio"]:checked + label:before {
+      background-color: #007bff;
+    }
+
+    .option label span {
+      white-space: nowrap;
+    }
+
+    @media (max-width: 576px) {
+      .card {
+        margin-left: 15px;
+        margin-right: 15px;
+      }
+.modal-dialog {
+  max-width: 1000px; /* 调整为你想要的宽度 */
+}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="card-body">
+        <h1 class="card-title">抑郁、焦虑和压力测试</h1>
+        <p class="card-text text-danger">该测试不能代替医生诊断。如果你有心理方面问题,请寻求心理医生,该测试仅供参考。</p>
+        <button id="startBtn" class="btn btn-primary">开始测试</button>
+        <div id="testContainer" style="display: none;">
+          <div id="questionNumber" class="mt-3"></div>
+          <div id="question" class="mt-3"></div>
+          <form id="options" class="mt-3">
+            <label class="option">
+              <input type="radio" name="answer" value="4">
+              <span>A: 完全符合</span>
+            </label>
+            <label class="option">
+              <input type="radio" name="answer" value="3">
+              <span>B: 比较符合</span>
+            </label>
+            <label class="option">
+              <input type="radio" name="answer" value="2">
+              <span>C: 一般</span>
+            </label>
+            <label class="option">
+              <input type="radio" name="answer" value="1">
+              <span>D: 比较不符合</span>
+            </label>
+            <label class="option">
+              <input type="radio" name="answer" value="0">
+              <span>E: 完全不符合</span>
+            </label>
+          </form>
+        </div>
+        <div id="result" class="mt-3" style="display: none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="disclaimerModal" tabindex="-1" role="dialog" aria-labelledby="disclaimerModalLabel" aria-hidden="true"></div>
+
+  <script>
+    const questions = [
+      {text: '我经常感到忧心忡忡、焦虑不安', category: '压力大'},
+      {text: '我常常睡眠质量差,难以入睡或醒来仍觉疲惫', category: '压力大'},
+      {text: '我对日常生活的事情没有什么兴趣或乐趣', category: '压力大'},
+      {text: '我时常感到无助和绝望', category: '压力大'},
+      {text: '我常常对自己感到失望或自责', category: '压力大'},
+      {text: '我常常感到孤独和被忽视', category: '压力大'},
+      {text: '我经常会对自己的能力缺乏信心', category: '压力大'},
+      {text: '我常常会感到人生毫无意义', category: '压力大'},
+      {text: '我常常会对自己的表现感到担心', category: '压力大'},
+      {text: '我经常会对自己的决定后悔或怀疑', category: '压力大'},
+      {text: '我有时会感到难过或情绪低落', category: '压力中等'},
+      {text: '我的注意力有时会难以集中', category: '压力中等'},
+      {text: '我会为一些小事感到烦恼或担忧', category: '压力中等'},
+      {text: '我会因为一些小事而情绪波动较大', category: '压力中等'},
+      {text: '我有时会对未来感到担忧或焦虑', category: '压力中等'},
+      {text: '我会为一些琐事耗费过多精力', category: '压力中等'},
+      {text: '我有时会对自己的决定感到怀疑', category: '压力中等'},
+      {text: '我会为一些未来可能发生的事情过度担心', category: '压力中等'},
+      {text: '我偶尔会对自己的社交能力感到不安', category: '压力中等'},
+      {text: '我常常会感到生活压力过大', category: '压力中等'},
+      {text: '我偶尔会感到轻微的焦虑或紧张', category: '压力小'},
+      {text: '我有时会对一些事情感到不确定或犹豫', category: '压力小'},
+      {text: '我会有适度的工作压力,但总体可控', category: '压力小'},
+      {text: '我偶尔会对自己的表现感到不满意', category: '压力小'},
+      {text: '我有时会对即将发生的事情感到紧张', category: '压力小'},
+      {text: '我会受到一些外界因素的影响而感到轻微的压力', category: '压力小'},
+      {text: '我有时会觉得自己无法掌控生活', category: '压力小'},
+      {text: '我会对一些变化感到不安或焦虑', category: '压力小'},
+      {text: '我偶尔会对自己的外表感到不满意', category: '压力小'},
+      {text: '我经常感到疲惫不堪,缺乏活力', category: '压力大'}
+    ];
+
+    const scores = {
+      '压力大': 0,
+      '压力中等': 0,
+      '压力小': 0,
+    };
+
+    let currentQuestion = 0;
+    const startBtn = document.getElementById('startBtn');
+    const testContainer = document.getElementById('testContainer');
+    const questionElement = document.getElementById('question');
+    const questionNumberElement = document.getElementById('questionNumber');
+    const optionsForm = document.getElementById('options');
+    const resultDiv = document.getElementById('result');
+
+    let selectedOption = null;
+
+    startBtn.addEventListener('click', showDisclaimerModal);
+    optionsForm.addEventListener('change', recordAnswer);
+function showDisclaimerModal() {
+  const disclaimerModal = document.getElementById('disclaimerModal');
+  disclaimerModal.innerHTML = `
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="disclaimerModalLabel">免责声明</h5>
+        </div>
+        <div class="modal-body">
+          <!-- 在这里加载免责声明的内容 -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">不同意</button>
+          <button type="button" class="btn btn-primary" id="agreeBtn">同意</button>
+        </div>
+      </div>
+    </div>
+  `;
+  fetch('xz.html')
+    .then(response => response.text())
+    .then(html => {
+      const modalBody = disclaimerModal.querySelector('.modal-body');
+      modalBody.innerHTML = html;
+    })
+    .catch(error => {
+      console.error('Error loading xz.html:', error);
+    });
+  // 在这里加载免责声明的内容，例如从另一个HTML文件中加载
+  // 或者直接在这里编写免责声明的内容
+
+  const agreeBtn = disclaimerModal.querySelector('#agreeBtn');
+  agreeBtn.addEventListener('click', () => {
+    startTest();
+    disclaimerModal.classList.remove('show');
+    disclaimerModal.setAttribute('aria-hidden', 'true');
+    disclaimerModal.style.display = 'none';
+    document.body.classList.remove('modal-open');
+    document.body.style.paddingRight = '0px';
+  });
+
+  disclaimerModal.classList.add('show');
+  disclaimerModal.setAttribute('aria-hidden', 'false');
+  disclaimerModal.style.display = 'block';
+  document.body.classList.add('modal-open');
+  document.body.style.paddingRight = '17px';
+}
+
+function startTest() {
+  testContainer.style.display = 'block';
+  showQuestion();
+}
+
+function showQuestion() {
+  const question = questions[currentQuestion];
+  questionElement.textContent = question.text;
+  questionNumberElement.textContent = `第 ${currentQuestion + 1} 题`;
+  selectedOption = null;
+}
+
+function recordAnswer() {
+  const answer = parseInt(optionsForm.answer.value);
+  const question = questions[currentQuestion];
+  scores[question.category] += answer;
+  selectedOption = optionsForm.answer.value;
+  optionsForm.reset();
+  currentQuestion++;
+  if (currentQuestion < questions.length) {
+    setTimeout(showQuestion, 500);
+  } else {
+    testContainer.style.display = 'none';
+    showResult();
+  }
+}
+
+function showResult() {
+  const total = Object.values(scores).reduce((a, b) => a + b, 0);
+  const percentages = {};
+  for (const category in scores) {
+    percentages[category] = (scores[category] / total * 100).toFixed(0);
+  }
+
+  let maxCategory = '';
+  let maxPercentage = 0;
+  for (const category in percentages) {
+    if (percentages[category] > maxPercentage) {
+      maxCategory = category;
+      maxPercentage = percentages[category];
+    }
+  }
+
+  resultDiv.innerHTML = `你当前的压力水平: <b>${maxCategory}</b>`;
+  resultDiv.style.display = 'block';
+}
+
+const options = document.querySelectorAll('.option input[type="radio"]');
+options.forEach(option => {
+  option.addEventListener('click', () => {
+    if (selectedOption !== option.value) {
+      selectedOption = option.value;
+      const labels = document.querySelectorAll('.option label');
+      labels.forEach(label => {
+        label.style.color = '';
+      });
+      const selectedLabel = option.nextElementSibling;
+      selectedLabel.style.color = 'blue';
+      setTimeout(() => {
+        selectedLabel.style.color = '';
+      }, 500);
+    }
+  });
+});
+</script>
+</body>
+</html>

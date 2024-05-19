@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+    <meta charset="UTF-8">
+    <title>身份证相关功能</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+.maintenance {
+  position: relative;
+}
+
+.maintenance::before {
+  content: "本功能正在维护";
+  display: block;
+  text-align: center;
+  font-weight: bold;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.8); /* 设置半透明度 */
+  padding: 150px;
+  z-index: 1; /* 确保提示文字在卡片之上 */
+}
+
+.maintenance .card-body {
+  opacity: 0.5; /* 设置卡片内容的不透明度 */
+  pointer-events: none; /* 禁止卡片内容被点击 */
+}
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            justify-content: center;
+            align-items: center;
+            height: 150vh;
+            margin: 0;
+        }
+        .card {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .form-control {
+            border-radius: 0;
+        }
+        .btn {
+            border-radius: 0;
+        }
+        .progress {
+            height: 20px;
+            background-color: #f3f3f3;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #4CAF50;
+            border-radius: 10px;
+            transition: width 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+    
+    <div class="container">
+        <div class="card maintenance">
+            <div class="card-body">
+                <h1 class="card-title">身份证签发地查询</h1>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="idNumber" placeholder="请输入身份证前六位（如：110101）" maxlength="6">
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <button class="btn btn-primary" id="queryBtn">查询</button>
+                    <span class="text-danger">本网站不会存储你的身份证号</span>
+                </div>
+                <div class="progress mt-3">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <div class="form-group mt-3">
+                    <textarea class="form-control" id="result" placeholder="示例：msg: 查询成功
+签发机关: 北京市公安局东城分局" rows="5" readonly></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-4">
+            <div class="card-body">
+                <h1 class="card-title">随机生成身份证号</h1>
+		<span class="text-danger">本网站不会存储你的身份证号(当生成内容出现“undefined”时，请重新点击生成）</span>
+                <div class="form-group">
+                    <label for="province">省份:</label>
+                    <select class="form-control" id="province">
+                        <option value="11">北京市</option>
+                        <option value="12">天津市</option>
+                        <option value="13">河北省</option>
+                        <option value="14">山西省</option>
+                        <option value="15">内蒙古自治区</option>
+                        <option value="21">辽宁省</option>
+                        <option value="22">吉林省</option>
+                        <option value="23">黑龙江省</option>
+                        <option value="31">上海市</option>
+                        <option value="32">江苏省</option>
+                        <option value="33">浙江省</option>
+                        <option value="34">安徽省</option>
+                        <option value="35">福建省</option>
+                        <option value="36">江西省</option>
+                        <option value="37">山东省</option>
+                        <option value="41">河南省</option>
+                        <option value="42">湖北省</option>
+                        <option value="43">湖南省</option>
+                        <option value="44">广东省</option>
+                        <option value="45">广西壮族自治区</option>
+                        <option value="46">海南省</option>
+                        <option value="50">重庆市</option>
+                        <option value="51">四川省</option>
+                        <option value="52">贵州省</option>
+                        <option value="53">云南省</option>
+                        <option value="54">西藏自治区</option>
+                        <option value="61">陕西省</option>
+                        <option value="62">甘肃省</option>
+                        <option value="63">青海省</option>
+                        <option value="64">宁夏回族自治区</option>
+                        <option value="65">新疆维吾尔自治区</option>
+                        <option value="71">台湾省</option>
+                        <option value="81">香港特别行政区</option>
+                        <option value="82">澳门特别行政区</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="gender">性别:</label>
+                    <select class="form-control" id="gender">
+                        <option value="1">男</option>
+                        <option value="0">女</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="count">生成数量:</label>
+                    <input type="number" class="form-control" id="count" min="1" max="5" value="1">
+                </div>
+                <div class="form-group">
+                    <label for="birthDate">出生日期:</label>
+                    <input type="date" class="form-control" id="birthDate">
+                </div>
+                <button class="btn btn-primary" id="generateBtn">生成</button>
+                <div class="form-group mt-3">
+                    <textarea class="form-control" id="generatedIdCards" placeholder="生成的身份证号将显示在这里..." rows="5" readonly></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    function loadHeaderContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("header-container").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "https://t.mg-tool.cn/header.php", true);
+        xhr.send();
+    }
+
+        const idNumber = document.getElementById('idNumber');
+        const queryBtn = document.getElementById('queryBtn');
+        const result = document.getElementById('result');
+        const progressBar = document.getElementById('progressBar');
+
+        const province = document.getElementById('province');
+        const gender = document.getElementById('gender');
+        const count = document.getElementById('count');
+        const birthDate = document.getElementById('birthDate');
+        const generateBtn = document.getElementById('generateBtn');
+        const generatedIdCards = document.getElementById('generatedIdCards');
+
+        queryBtn.addEventListener('click', queryIssuingAuthority);
+        generateBtn.addEventListener('click', generateIdCards);
+
+        function queryIssuingAuthority() {
+            const idNumber = document.getElementById("idNumber").value;
+            const apiUrl = `https://cqapi.site/API/qf.php?msg=${idNumber}`;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", apiUrl, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const result = document.getElementById("result");
+                    const responseText = xhr.responseText;
+                    const lines = responseText.split("\n");
+                    const resultLines = [];
+                    for (const line of lines) {
+                        const parts = line.split(":");
+                        if (parts.length === 2) {
+                            resultLines.push(`${parts[0]}: ${parts[1].trim()}`);
+                        }
+                    }
+                    result.textContent = resultLines.join("\n");
+                }
+            };
+            xhr.send();
+        }
+         function generateIdCards() {
+            const provinceCode = province.value; // 使用完整的省份代码
+            const sex = gender.value;
+            const num = count.value;
+            const dateStr = birthDate.value.replace(/-/g, '');
+
+            const idCards = [];
+            for (let i = 0; i < num; i++) {
+                const addressCode = `${provinceCode}0101`; // 修改后的 6 位地址码
+                const birthDateCode = dateStr; // 8位出生日期码
+                const orderCode = `${(sex === '1' ? Math.floor(Math.random() * 50) + 1 : Math.floor(Math.random() * 50) * 2)}${Math.floor(Math.random() * 1)}`; // 3位顺序码
+                const idCard = `${addressCode}${birthDateCode}${orderCode}`;
+                const checkDigit = generateCheckDigit(idCard); // 计算校验码
+                idCards.push(`${idCard}${checkDigit}`); // 生成身份证号码
+            }
+
+            generatedIdCards.value = idCards.join('\n');
+        }
+
+        // 计算身份证号码校验码的函数
+        function generateCheckDigit(idCard) {
+            const weights = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2];
+            let sum = 0;
+            for (let i = 0; i < 17; i++) {
+                sum += parseInt(idCard.charAt(i)) * weights[i];
+            }
+            const remainder = sum % 11;
+            const checkDigitMap = ['1', '0', 'X', '9', '8', '7', '6', '5', '4', '3', '2'];
+            return checkDigitMap[remainder];
+        }
+    </script>
+</body>
+</html>

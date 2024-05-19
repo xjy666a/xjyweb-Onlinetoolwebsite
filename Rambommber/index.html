@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+
+  <meta charset="utf-8">
+  <title>随机数生成器</title>
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+  <style>
+    body {
+      font-family: Arial;
+      max-width: 800px;
+      margin: 0 auto;
+      padding-top: 50px;
+    }
+    .card {
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .form-control {
+      border-radius: 0;
+    }
+    .btn {
+      border-radius: 0;
+    }
+    #panel {
+      padding: 20px;
+    }
+    #historyList {
+      list-style: none;
+      padding: 0;
+    }
+    #historyList li {
+      line-height: 1.8;
+    }
+    #exportText {
+      margin-top: 20px;
+      width: 100%;
+      height: 150px;
+      padding: 10px;
+      border-radius: 3px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+    
+  <div class="container">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">随机数生成器</h5>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="minNum">随机数最小值:</label>
+            <input type="number" class="form-control" id="minNum">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="maxNum">随机数最大值:</label>
+            <input type="number" class="form-control" id="maxNum">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="excludeMin">不取随机数最小值(必须大于最小值）:</label>
+            <input type="number" class="form-control" id="excludeMin">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="excludeMax">不取随机数最大值(必须小于最大值）:</label>
+            <input type="number" class="form-control" id="excludeMax">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="excludeValues">单独不取数值(用逗号分隔）:</label>
+          <input type="text" class="form-control" id="excludeValues">
+        </div>
+        <button class="btn btn-primary" onclick="generate()">生成随机数</button>
+        <button class="btn btn-secondary" onclick="toggleVisibility()">显示/隐藏面板</button>
+      </div>
+    </div>
+
+    <div id="panel" class="card mt-4">
+      <div class="card-body">
+        <div class="mb-3">
+          <p>历史随机数:</p>
+          <ul id="historyList"></ul>
+        </div>
+        <div class="mb-3">
+          <p>随机数和: <span id="sum">0</span></p>
+          <p>随机数乘积: <span id="product">1</span></p>
+        </div>
+        <button class="btn btn-danger mb-3" onclick="clearHistory()">清除历史记录</button>
+        <div class="form-group">
+          <label for="exportText">导出设置:</label>
+          <textarea class="form-control" id="exportText" rows="4"></textarea>
+          <button class="btn btn-primary mt-2" onclick="exportSettings()">导出</button>
+        </div>
+        <div class="form-group">
+          <label for="importFile">导入设置:</label>
+          <input type="file" class="form-control-file" id="importFile">
+          <button class="btn btn-primary mt-2" onclick="importSettings()">导入</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+    function loadHeaderContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("header-container").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "https://t.mg-tool.cn/header.php", true);
+        xhr.send();
+    }
+
+
+
+let history = [];
+
+  
+
+function generate() {
+
+
+
+  let min = parseInt(document.getElementById("minNum").value);
+
+  let max = parseInt(document.getElementById("maxNum").value);
+
+
+
+  let excludeMin = parseInt(document.getElementById("excludeMin").value);
+
+  let excludeMax = parseInt(document.getElementById("excludeMax").value);  
+
+
+
+  let excludeText = document.getElementById("excludeValues").value;
+
+  let excludeValues = excludeText.split(",");
+
+    
+
+  let randomNum;
+
+  
+
+  do {
+
+    randomNum = Math.floor(Math.random() * (max - min + 1)) + min;
+
+  } while (randomNum >= excludeMin && randomNum <= excludeMax || excludeValues.includes(randomNum+""));
+
+
+
+  history.push(randomNum);
+
+  
+
+  showHistory();
+
+  updateStats();
+
+}
+
+
+
+function showHistory() {
+
+  let historyList = "";
+
+  for(let i = 0; i < history.length; i++) {
+
+    historyList += "<li>" + history[i] + "</li>";
+
+  }
+
+  document.getElementById("historyList").innerHTML = historyList; 
+
+}
+
+
+
+function updateStats() {
+
+  let sum = 0;
+
+  let product = 1;
+
+  for(let i = 0; i < history.length; i++) {
+
+    sum += history[i];
+
+    product *= history[i];
+
+  }
+
+  
+
+  document.getElementById("sum").innerText = sum; 
+
+  document.getElementById("product").innerText = product;  
+
+}
+
+
+
+function clearHistory() {
+
+  history = [];
+
+  document.getElementById("historyList").innerHTML = "";
+
+  updateStats(); 
+
+}
+
+
+
+function exportSettings() {
+
+  let settings = {};
+
+  settings.min = document.getElementById("minNum").value; 
+
+  settings.max = document.getElementById("maxNum").value;
+
+  settings.excludeMin = document.getElementById("excludeMin").value;
+
+  settings.excludeMax = document.getElementById("excludeMax").value;
+
+  settings.excludeValues = document.getElementById("excludeValues").value;
+
+  
+
+  document.getElementById("exportText").value = JSON.stringify(settings); 
+
+}
+
+
+
+function importSettings() {
+
+  let file = document.getElementById("importFile").files[0];
+
+  
+
+  let reader = new FileReader();
+
+  reader.readAsText(file);
+
+  reader.onload = function() {
+
+    let importedSettings = JSON.parse(reader.result);
+
+    
+
+    document.getElementById("minNum").value = importedSettings.min;
+
+    document.getElementById("maxNum").value = importedSettings.max; 
+
+    document.getElementById("excludeMin").value = importedSettings.excludeMin;
+
+    document.getElementById("excludeMax").value = importedSettings.excludeMax;   
+
+    document.getElementById("excludeValues").value = importedSettings.excludeValues; 
+
+  }
+
+}
+
+
+
+function toggleVisibility() {
+
+
+
+let minNum = document.getElementById("minNum");
+
+let maxNum = document.getElementById("maxNum");
+
+let excludeMin = document.getElementById("excludeMin");
+
+let excludeMax = document.getElementById("excludeMax");
+
+let excludeValues = document.getElementById("excludeValues");
+
+
+
+if(minNum.style.display === "none") {
+
+  minNum.style.display = "block"; 
+
+  maxNum.style.display = "block";
+
+  excludeMin.style.display = "block";
+
+  excludeMax.style.display = "block"; 
+
+  excludeValues.style.display = "block";
+
+} else {
+
+  minNum.style.display = "none";
+
+  maxNum.style.display = "none";
+
+  excludeMin.style.display = "none";
+
+  excludeMax.style.display = "none"; 
+
+  excludeValues.style.display = "none";  
+
+}
+
+
+
+}
+
+
+
+</script>
+
+
+
+</body>
+
+</html>

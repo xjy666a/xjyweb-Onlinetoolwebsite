@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>24点计算器</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.net/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+
+  <style>
+
+    body {
+
+      background-color: #f8f9fa;
+
+    }
+
+    .container {
+
+      max-width: 800px;
+
+      margin-top: 50px;
+
+    }
+
+    .card {
+
+      margin-bottom: 20px;
+
+    }
+
+    .result {
+
+      margin-top: 20px;
+
+      font-weight: bold;
+
+    }
+
+    .card-img-top {
+
+      max-width: 100px;
+
+      margin: 0 auto;
+
+    }
+
+  </style>
+
+</head>
+
+   
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+    
+
+  <div class="container">
+
+    <div class="row">
+
+      <div class="col-md-6">
+
+        <div class="card">
+
+          <div class="card-body">
+
+            <h5 class="card-title">24点计算器</h5>
+
+            <div class="form-group">
+
+              <input type="number" class="form-control" id="num1" placeholder="输入第一个数字" min="1" max="10" required>
+
+            </div>
+
+            <div class="form-group">
+
+              <input type="number" class="form-control" id="num2" placeholder="输入第二个数字" min="1" max="10" required>
+
+            </div>
+
+            <div class="form-group">
+
+              <input type="number" class="form-control" id="num3" placeholder="输入第三个数字" min="1" max="10" required>
+
+            </div>
+
+            <div class="form-group">
+
+              <input type="number" class="form-control" id="num4" placeholder="输入第四个数字" min="1" max="10" required>
+
+            </div>
+
+            <button class="btn btn-primary btn-block" onclick="calculate()">计算</button>
+
+            <div class="result text-center" id="result"></div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="col-md-6">
+
+        <div class="card">
+
+          <div class="card-body">
+
+            <h5 class="card-title">随机24点</h5>
+
+            <div class="text-center">
+
+              <img src="" alt="" class="card-img-top" id="card1">
+
+              <img src="" alt="" class="card-img-top" id="card2">
+
+              <img src="" alt="" class="card-img-top" id="card3">
+
+              <img src="" alt="" class="card-img-top" id="card4">
+
+            </div>
+
+            <button class="btn btn-primary btn-block" onclick="generateNumbers()">生成数字</button>
+
+            <button class="btn btn-success btn-block" onclick="showAnswer()">查看答案</button>
+
+            <div class="result text-center" id="random-result"></div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+<script>
+    function loadHeaderContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("header-container").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "https://t.mg-tool.cn/header.php", true);
+        xhr.send();
+    }
+
+    function calculate() {
+
+      const num1 = parseInt(document.getElementById('num1').value);
+
+      const num2 = parseInt(document.getElementById('num2').value);
+
+      const num3 = parseInt(document.getElementById('num3').value);
+
+      const num4 = parseInt(document.getElementById('num4').value);
+
+      const numbers = [num1, num2, num3, num4];
+
+
+
+      const result = solve24(numbers, '');
+
+      if (result) {
+
+        const formattedResult = result.replace(/\(/g, '').replace(/\)/g, '').replace(/ /g, ' ') + ' = 24';
+
+        document.getElementById('result').textContent = `解法: ${formattedResult}`;
+
+      } else {
+
+        document.getElementById('result').textContent = '无解';
+
+      }
+
+    }
+
+
+
+    function solve24(nums, expression) {
+
+      const operations = ['+', '-', '*', '/'];
+
+      const n = nums.length;
+
+
+
+      if (n === 1) {
+
+        const result = nums[0] === 24 ? `${nums[0]}` : null;
+
+        return result ? `${expression}${result}` : null;
+
+      }
+
+
+
+      for (let i = 0; i < n; i++) {
+
+        for (let j = 0; j < n; j++) {
+
+          if (i !== j) {
+
+            const remaining = [...nums];
+
+            const a = remaining.splice(i, 1)[0];
+
+            const b = remaining.splice(j - (i < j), 1)[0];
+
+
+
+            for (const op of operations) {
+
+              let result;
+
+              switch (op) {
+
+                case '+':
+
+                  result = a + b;
+
+                  break;
+
+                case '-':
+
+                  result = a - b;
+
+                  break;
+
+                case '*':
+
+                  result = a * b;
+
+                  break;
+
+                case '/':
+
+                  if (b !== 0) {
+
+                    result = a / b;
+
+                  } else {
+
+                    continue;
+
+                  }
+
+                  break;
+
+              }
+
+
+
+              remaining.push(result);
+
+              const newExpression = `${expression}(${a} ${op} ${b}) `;
+
+              const expression24 = solve24(remaining, newExpression);
+
+              if (expression24 !== null) {
+
+                return expression24;
+
+              }
+
+              remaining.pop();
+
+            }
+
+          }
+
+        }
+
+      }
+
+
+
+      return null;
+
+    }
+
+
+
+    function generateNumbers() {
+
+      const numbers = [];
+
+
+
+      while (numbers.length < 4) {
+
+        const randomNumber = Math.floor(Math.random() * 10) + 1;
+
+        if (!numbers.includes(randomNumber)) {
+
+          numbers.push(randomNumber);
+
+          document.getElementById(`card${numbers.length}`).src = `${randomNumber}.png`;
+
+        }
+
+      }
+
+
+
+      if (solve24(numbers, '')) {
+
+        document.getElementById('random-result').textContent = '';
+
+      } else {
+
+        generateNumbers();
+
+      }
+
+    }
+
+
+
+    function showAnswer() {
+
+      const numbers = [];
+
+      for (let i = 1; i <= 4; i++) {
+
+        const card = document.getElementById(`card${i}`);
+
+        const number = parseInt(card.src.split('/').pop().replace('.png', ''));
+
+        numbers.push(number);
+
+      }
+
+
+
+      const result = solve24(numbers, '');
+
+      if (result) {
+
+        const formattedResult = result.replace(/\(/g, '').replace(/\)/g, '').replace(/ /g, ' ') + ' = 24';
+
+        document.getElementById('random-result').textContent = `解法: ${formattedResult}`;
+
+      } else {
+
+        document.getElementById('random-result').textContent = '无解';
+
+      }
+
+    }
+
+  </script>
+
+</body>
+
+</html>

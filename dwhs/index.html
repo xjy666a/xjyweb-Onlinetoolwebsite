@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>单位换算器</title>
+
+  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.1/css/bootstrap.min.css">
+
+  <style>
+
+    .card {
+
+      margin-bottom: 20px;
+
+    }
+
+  </style>
+
+</head>
+
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+    
+
+
+
+  <div class="container my-5">
+
+    <h1 class="text-center mb-4">单位换算器</h1>
+
+
+
+    <div class="card">
+
+      <div class="card-header">
+
+        <h2 class="mb-0">长度</h2>
+
+      </div>
+
+      <div class="card-body">
+
+        <div class="input-group mb-3">
+
+          <input type="number" class="form-control" id="lengthInput" placeholder="请输入值">
+
+          <select class="form-select" id="lengthUnit1">
+
+            <option value="mm">毫米</option>
+
+            <option value="cm">厘米</option>
+
+            <option value="m">米</option>
+
+            <option value="km">千米</option>
+
+          </select>
+
+        </div>
+
+        <div class="input-group mb-3">
+
+          <span class="input-group-text">=</span>
+
+          <span class="form-control" id="lengthResult"></span>
+
+          <select class="form-select" id="lengthUnit2">
+
+            <option value="mm">毫米</option>
+
+            <option value="cm">厘米</option>
+
+            <option value="m">米</option>
+
+            <option value="km">千米</option>
+
+          </select>
+
+        </div>
+
+        <button class="btn btn-primary" onclick="convertLength()">转换</button>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="card">
+
+      <div class="card-header">
+
+        <h2 class="mb-0">面积</h2>
+
+      </div>
+
+      <div class="card-body">
+
+        <div class="input-group mb-3">
+
+          <input type="number" class="form-control" id="areaInput" placeholder="请输入值">
+
+          <select class="form-select" id="areaUnit1">
+
+            <option value="mm2">平方毫米</option>
+
+            <option value="cm2">平方厘米</option>
+
+            <option value="m2">平方米</option>
+
+            <option value="km2">平方千米</option>
+
+          </select>
+
+        </div>
+
+        <div class="input-group mb-3">
+
+          <span class="input-group-text">=</span>
+
+          <span class="form-control" id="areaResult"></span>
+
+          <select class="form-select" id="areaUnit2">
+
+            <option value="mm2">平方毫米</option>
+
+            <option value="cm2">平方厘米</option>
+
+            <option value="m2">平方米</option>
+
+            <option value="km2">平方千米</option>
+
+          </select>
+
+        </div>
+
+        <button class="btn btn-primary" onclick="convertArea()">转换</button>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="card">
+
+      <div class="card-header">
+
+        <h2 class="mb-0">体积</h2>
+
+      </div>
+
+      <div class="card-body">
+
+        <div class="input-group mb-3">
+
+          <input type="number" class="form-control" id="volumeInput" placeholder="请输入值">
+
+          <select class="form-select" id="volumeUnit1">
+
+            <option value="mm3">立方毫米</option>
+
+            <option value="cm3">立方厘米</option>
+
+            <option value="m3">立方米</option>
+
+            <option value="l">升</option>
+
+          </select>
+
+        </div>
+
+        <div class="input-group mb-3">
+
+          <span class="input-group-text">=</span>
+
+          <span class="form-control" id="volumeResult"></span>
+
+          <select class="form-select" id="volumeUnit2">
+
+            <option value="mm3">立方毫米</option>
+
+            <option value="cm3">立方厘米</option>
+
+            <option value="m3">立方米</option>
+
+            <option value="l">升</option>
+
+          </select>
+
+        </div>
+
+        <button class="btn btn-primary" onclick="convertVolume()">转换</button>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="card">
+
+      <div class="card-header">
+
+        <h2 class="mb-0">温度</h2>
+
+      </div>
+
+      <div class="card-body">
+
+        <div class="input-group mb-3">
+
+          <input type="number" class="form-control" id="tempInput" placeholder="请输入值">
+
+          <select class="form-select" id="tempUnit1">
+
+            <option value="c">摄氏度</option>
+
+            <option value="f">华氏度</option>
+
+            <option value="k">开尔文</option>
+
+          </select>
+
+        </div>
+
+        <div class="input-group mb-3">
+
+          <span class="input-group-text">=</span>
+
+          <span class="form-control" id="tempResult"></span>
+
+          <select class="form-select" id="tempUnit2">
+
+            <option value="c">摄氏度</option>
+
+            <option value="f">华氏度</option>
+
+            <option value="k">开尔文</option>
+
+          </select>
+
+        </div>
+
+        <button class="btn btn-primary" onclick="convertTemp()">转换</button>
+
+      </div>
+
+    </div>
+
+
+
+    <div class="card">
+
+      <div class="card-header">
+
+        <h2 class="mb-0">质量</h2>
+
+      </div>
+
+      <div class="card-body">
+
+        <div class="input-group mb-3">
+
+          <input type="number" class="form-control" id="massInput" placeholder="请输入值">
+
+          <select class="form-select" id="massUnit1">
+
+            <option value="mg">毫克</option>
+
+            <option value="g">克</option>
+
+            <option value="kg">千克</option>
+
+            <option value="t">吨</option>
+
+          </select>
+
+        </div>
+
+        <div class="input-group mb-3">
+
+          <span class="input-group-text">=</span>
+
+          <span class="form-control" id="massResult"></span>
+
+          <select class="form-select" id="massUnit2">
+
+            <option value="mg">毫克</option>
+
+            <option value="g">克</option>
+
+            <option value="kg">千克</option>
+
+            <option value="t">吨</option>
+
+          </select>
+
+        </div>
+
+        <button class="btn btn-primary" onclick="convertMass()">转换</button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+
+<script>
+    function loadHeaderContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("header-container").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "https://t.mg-tool.cn/header.php", true);
+        xhr.send();
+    }
+
+    function convertLength() {
+
+      const input = parseFloat(document.getElementById("lengthInput").value);
+
+      const unit1 = document.getElementById("lengthUnit1").value;
+
+      const unit2 = document.getElementById("lengthUnit2").value;
+
+      let result;
+
+
+
+      switch(unit1) {
+
+        case "mm":
+
+          switch(unit2) {
+
+            case "mm": result = input; break;
+
+            case "cm": result = input / 10; break;
+
+            case "m": result = input / 1000; break;
+
+            case "km": result = input / 1000000; break;
+
+          }
+
+          break;
+
+        case "cm":
+
+          switch(unit2) {
+
+            case "mm": result = input * 10; break;
+
+            case "cm": result = input; break;
+
+            case "m": result = input / 100; break;
+
+            case "km": result = input / 100000; break;
+
+          }
+
+          break;
+
+        case "m":
+
+          switch(unit2) {
+
+            case "mm": result = input * 1000; break;
+
+            case "cm": result = input * 100; break;
+
+            case "m": result = input; break;
+
+            case "km": result = input / 1000; break;
+
+          }
+
+          break;
+
+        case "km":
+
+          switch(unit2) {
+
+            case "mm": result = input * 1000000; break;
+
+            case "cm": result = input * 100000; break;
+
+            case "m": result = input * 1000; break;
+
+            case "km": result = input; break;
+
+          }
+
+          break;
+
+      }
+
+
+
+      document.getElementById("lengthResult").textContent = result.toFixed(4);
+
+    }
+
+
+
+    function convertArea() {
+
+      const input = parseFloat(document.getElementById("areaInput").value);
+
+      const unit1 = document.getElementById("areaUnit1").value;
+
+      const unit2 = document.getElementById("areaUnit2").value;
+
+      let result;
+
+
+
+      switch(unit1) {
+
+        case "mm2":
+
+          switch(unit2) {
+
+            case "mm2": result = input; break;
+
+            case "cm2": result = input / 100; break;
+
+            case "m2": result = input / 1000000; break;
+
+            case "km2": result = input / 1000000000000; break;
+
+          }
+
+          break;
+
+        case "cm2":
+
+          switch(unit2) {
+
+            case "mm2": result = input * 100; break;
+
+            case "cm2": result = input; break;
+
+            case "m2": result = input / 10000; break;
+
+            case "km2": result = input / 10000000000; break;
+
+          }
+
+          break;
+
+        case "m2":
+
+          switch(unit2) {
+
+            case "mm2": result = input * 1000000; break;
+
+            case "cm2": result = input * 10000; break;
+
+            case "m2": result = input; break;
+
+            case "km2": result = input / 1000000; break;
+
+          }
+
+          break;
+
+        case "km2":
+
+          switch(unit2) {
+
+            case "mm2": result = input * 1000000000000; break;
+
+            case "cm2": result = input * 10000000000; break;
+
+            case "m2": result = input * 1000000; break;
+
+            case "km2": result = input; break;
+
+          }
+
+          break;
+
+      }
+
+
+
+      document.getElementById("areaResult").textContent = result.toFixed(4);
+
+    }
+
+
+
+    function convertVolume() {
+
+      const input = parseFloat(document.getElementById("volumeInput").value);
+
+      const unit1 = document.getElementById("volumeUnit1").value;
+
+      const unit2 = document.getElementById("volumeUnit2").value;
+
+      let result;
+
+
+
+      switch(unit1) {
+
+        case "mm3":
+
+          switch(unit2) {
+
+            case "mm3": result = input; break;
+
+            case "cm3": result = input / 1000; break;
+
+            case "m3": result = input / 1000000000; break;
+
+            case "l": result = input / 1000000; break;
+
+          }
+
+          break;
+
+        case "cm3":
+
+          switch(unit2) {
+
+            case "mm3": result = input * 1000; break;
+
+            case "cm3": result = input; break;
+
+            case "m3": result = input / 1000000; break;
+
+            case "l": result = input / 1000; break;
+
+          }
+
+          break;
+
+        case "m3":
+
+          switch(unit2) {
+
+            case "mm3": result = input * 1000000000; break;
+
+            case "cm3": result = input * 1000000; break;
+
+            case "m3": result = input; break;
+
+            case "l": result = input * 1000; break;
+
+          }
+
+          break;
+
+        case "l":
+
+          switch(unit2) {
+
+            case "mm3": result = input * 1000000; break;
+
+            case "cm3": result = input * 1000; break;
+
+            case "m3": result = input / 1000; break;
+
+            case "l": result = input; break;
+
+          }
+
+          break;
+
+      }
+
+
+
+      document.getElementById("volumeResult").textContent = result.toFixed(4);
+
+    }
+
+
+
+    function convertTemp() {
+
+      const input = parseFloat(document.getElementById("tempInput").value);
+
+      const unit1 = document.getElementById("tempUnit1").value;
+
+      const unit2 = document.getElementById("tempUnit2").value;
+
+      let result;
+
+
+
+      switch(unit1) {
+
+        case "c":
+
+          switch(unit2) {
+
+            case "c": result = input; break;
+
+            case "f": result = (input * 9/5) + 32; break;
+
+            case "k": result = input + 273.15; break;
+
+          }
+
+          break;
+
+        case "f":
+
+          switch(unit2) {
+
+            case "c": result = (input - 32) * 5/9; break;
+
+            case "f": result = input; break;
+
+            case "k": result = (input - 32) * 5/9 + 273.15; break;
+
+          }
+
+          break;
+
+        case "k":
+
+          switch(unit2) {
+
+            case "c": result = input - 273.15; break;
+
+            case "f": result = (input - 273.15) * 9/5 + 32; break;
+
+            case "k": result = input; break;
+
+          }
+
+          break;
+
+      }
+
+
+
+      document.getElementById("tempResult").textContent = result.toFixed(4);
+
+    }
+
+
+
+    function convertMass() {
+
+      const input = parseFloat(document.getElementById("massInput").value);
+
+      const unit1 = document.getElementById("massUnit1").value;
+
+      const unit2 = document.getElementById("massUnit2").value;
+
+      let result;
+
+
+
+      switch(unit1) {
+
+        case "mg":
+
+          switch(unit2) {
+
+            case "mg": result = input; break;
+
+            case "g": result = input / 1000; break;
+
+            case "kg": result = input / 1000000; break;
+
+            case "t": result = input / 1000000000; break;
+
+          }
+
+          break;
+
+        case "g":
+
+          switch(unit2) {
+
+            case "mg": result = input * 1000; break;
+
+            case "g": result = input; break;
+
+            case "kg": result = input / 1000; break;
+
+            case "t": result = input / 1000000; break;
+
+          }
+
+          break;
+
+        case "kg":
+
+          switch(unit2) {
+
+            case "mg": result = input * 1000000; break;
+
+            case "g": result = input * 1000; break;
+
+            case "kg": result = input; break;
+
+            case "t": result = input / 1000; break;
+
+          }
+
+          break;
+
+        case "t":
+
+          switch(unit2) {
+
+            case "mg": result = input * 1000000000; break;
+
+            case "g": result = input * 1000000; break;
+
+            case "kg": result = input * 1000; break;
+
+            case "t": result = input; break;
+
+          }
+
+          break;
+
+      }
+
+
+
+      document.getElementById("massResult").textContent = result.toFixed(4);
+
+    }
+
+  </script>
+
+  <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.1/css/bootstrap.min.css"></script>
+
+</body>
+
+</html>

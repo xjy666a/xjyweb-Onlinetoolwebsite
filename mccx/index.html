@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <meta charset="UTF-8">
+<head>
+
+
+    <title>Minecraft UUID 和皮肤查看器</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.net/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        body {
+            padding-top: 50px;
+        }
+        .container {
+            max-width: 600px;
+        }
+        img {
+            max-width: 200px;
+            max-height: 200px;
+            margin: 10px;
+        }
+    </style>
+</head>
+
+   
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+    
+    <div class="container">
+        <h1 class="text-center mb-4">Minecraft UUID 和皮肤查看器</h1>
+        <div class="form-group">
+            <label for="username">输入 Minecraft 用户名:</label>
+            <input type="text" class="form-control" id="username" placeholder="请输入用户名">
+        </div>
+        <button class="btn btn-primary btn-block" onclick="getUUID()">获取 UUID</button>
+        <div id="result" class="mt-4"></div>
+        <div id="images" class="text-center mt-4"></div>
+        <div id="downloads" class="text-center mt-4"></div>
+    </div>
+
+<script>
+    function loadHeaderContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("header-container").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "https://t.mg-tool.cn/header.php", true);
+        xhr.send();
+    }
+
+        function getUUID() {
+            const username = document.getElementById("username").value;
+            const apiUrl = `get_uuid.php?username=${username}`;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        alert(data.error);
+                        return;
+                    }
+
+                    const uuid = data.id;
+                    const resultDiv = document.getElementById("result");
+                    resultDiv.innerHTML = `<p>UUID: ${uuid}</p>`;
+
+                    const imagesDiv = document.getElementById("images");
+                    imagesDiv.innerHTML = `
+                        <img src="https://crafatar.com/renders/head/${uuid}" alt="玩家头像" class="rounded">
+                        <img src="https://crafatar.com/skins/${uuid}" alt="玩家皮肤" class="rounded">
+                        <img src="https://crafatar.com/capes/${uuid}" alt="玩家披风" class="rounded">
+                    `;
+
+                    const downloadsDiv = document.getElementById("downloads");
+                    downloadsDiv.innerHTML = `
+                        <a href="https://crafatar.com/renders/head/${uuid}?overlay" download="player_head.png" class="btn btn-success">下载头像</a>
+                        <a href="https://crafatar.com/skins/${uuid}" download="player_skin.png" class="btn btn-success">下载皮肤</a>
+                        <a href="https://crafatar.com/capes/${uuid}" download="player_cloak.png" class="btn btn-success">下载披风</a>
+                    `;
+                })
+                .catch(error => {
+                    console.error("错误:", error);
+                    alert("获取 UUID 时出现错误。");
+                });
+        }
+    </script>
+</body>
+</html>

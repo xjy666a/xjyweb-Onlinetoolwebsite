@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+
+<head>
+
+
+
+ <title>Minecraft Quiz</title>
+
+ 
+  <link href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+   <link rel="stylesheet" href="https://cdn.staticfile.net/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+ <style>
+
+   .card {
+
+     margin-bottom: 20px;
+
+   }
+
+ </style>
+
+</head>
+
+
+   
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+    
+
+ <div class="container mt-5">
+
+   <h1 class="text-center mb-5">Minecraft Quiz（来源：中文 Minecraft Wiki）</h1>
+
+
+
+   <div class="card">
+
+     <div class="card-header">
+
+       <h5 class="mb-0">第一大题：常识</h5>
+
+     </div>
+
+     <div class="card-body">
+
+       <form id="quiz-form">
+
+         <div class="mb-3">
+
+           <label for="q1" class="form-label">问题1： Minecraft《我的世界》是由（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）开发的一款3D沙盒电子游戏。</label>
+
+           <input type="text" class="form-control" id="q1" placeholder="输入答案，用空格分隔" required>
+
+         </div>
+
+         <div class="mb-3">
+
+           <label for="q2" class="form-label">问题2：Minecraft当前可分为（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）版、（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）版和（&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;）版，另有为中国大陆玩家提供的中国版。</label>
+
+           <input type="text" class="form-control" id="q2" placeholder="输入答案，用空格分隔" required>
+
+         </div>
+
+         <div class="mb-3">
+
+           <label for="q3" class="form-label">问题3：minecraft有多少目前仍处于支持状态的衍生游戏？</label>
+
+           <input type="text" class="form-control" id="q3" required>
+
+         </div>
+
+         <div class="mb-3">
+
+           <label for="q4" class="form-label">问题4：minecraft有多少维度？（分别是什么）</label>
+
+           <input type="text" class="form-control" id="q4" required>
+
+         </div>
+
+         <div class="mb-3">
+
+           <label for="q5" class="form-label">问题5：minecraft中，天堂是原版内容吗？</label>
+
+           <input type="text" class="form-control" id="q5" required>
+
+         </div>
+
+         <div class="mb-3">
+
+           <label for="q6" class="form-label">问题6：minecraft中，鸡蛋，末影珍珠，和熟猪排的最大堆叠数量分别是多少？</label>
+
+           <input type="text" class="form-control" id="q6" placeholder="输入答案，用空格分隔" required>
+
+         </div>
+
+       </form>
+
+     </div>
+
+   </div>
+
+
+
+   <div class="card">
+
+     <div class="card-header">
+
+       <h5 class="mb-0">第二大题：mc小知识</h5>
+
+     </div>
+
+     <div class="card-body">
+
+       <form id="quiz-form">
+
+         <div class="mb-3">
+
+           <label for="q7" class="form-label">问题1：基岩的硬度和爆炸抗性分别为</label>
+
+           <input type="text" class="form-control" id="q7" placeholder="输入答案，用空格分隔" required>
+
+         </div>
+
+         <div class="mb-3">
+
+           <label for="q8" class="form-label">问题2：干草捆会很常见地生成于(   )(填群系）村庄周围，也会生成于(   )(填群系）村庄和(   )(填群系）村庄，但不像在(   )(填群系）村庄中那么常见。干草捆也会作为（   ）（填结构名称）的标靶/稻草人的一部分生成。</label>
+
+           <input type="text" class="form-control" id="q8" placeholder="输入答案，用空格分隔" required>
+
+         </div>
+
+         <div class="mb-3">
+
+           <label for="q9" class="form-label">问题3：混凝土粉末（Concrete Powder）是有（   ）颜色、可以被（   ）转变为（   ）的（   ）方块。</label>
+
+           <input type="text" class="form-control" id="q9" placeholder="输入答案，用空格分隔" required>
+
+         </div>
+
+         <div class="mb-3">
+
+           <label for="q10" class="form-label">问题4：屏障不会生成在（   ）中。屏障只能通过创造模式物品栏\[仅（   ）版\]、（   ）模式中使用选取方块或（   ）获得</label>
+
+           <input type="text" class="form-control" id="q10" placeholder="输入答案，用空格分隔" required>
+
+         </div>
+
+         <div class="mb-3">
+
+           <label for="q11" class="form-label">问题5：空气存在于任何未被方块占用的空间里。在Java版中，（ ）空气存在于不在建造范围内的方块位置，包括未加载的（ )和高于或低于( )高度的区域,即( ) 。</label>
+
+           <input type="text" class="form-control" id="q11" placeholder="输入答案，用空格分隔" required>
+
+         </div>
+
+         <div class="mb-3">
+
+           <label for="q12" class="form-label">问题6：下界反应核只能通过对已有的下界反应核使用（   ）方块获得、从携带版（   ）.b1前包含下界反应核并升级了的世界中获取、通过物品栏编辑器或附加包获得。</label>
+
+           <input type="text" class="form-control" id="q12" placeholder="输入答案，用空格分隔" required>
+
+         </div>
+
+         <button type="button" class="btn btn-primary" onclick="submitQuiz()">提交</button>
+
+       </form>
+
+     </div>
+
+   </div>
+
+
+
+   <div id="result" class="card" style="display: none;">
+
+     <div class="card-body">
+
+       <h5 class="card-title">结果</h5>
+
+       <p id="score"></p>
+
+       <p id="grade"></p>
+
+       <hr>
+
+       <h6>题目来源和答案：</h6>
+
+       <ol id="answers">
+
+       </ol>
+
+     </div>
+
+   </div>
+
+ </div>
+
+
+
+<script>
+    function loadHeaderContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("header-container").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "https://t.mg-tool.cn/header.php", true);
+        xhr.send();
+    }
+
+   const answers = [
+
+     ["Mojang Studios", 1],
+
+     ["Java", "基岩", "教育", 3],
+
+     ["Minecraft Dungeons Minecraft Legends", 2],
+
+     ["主世界 下界 末路之地", 3],
+
+     ["不是", 1],
+
+     ["16", "16", "64", 3],
+
+     ["-1", "3600000", 2],
+
+     ["平原", "沙漠", "热带草原", "平原", "掠夺者前哨站", 5],
+
+     ["16", "水", "混凝土", "固体", 4],
+
+     ["世界", "Java", "创造", "命令", 4],
+
+     ["虚空", "区块", "建造高度", "虚空", 4],
+
+     ["选取", "0.12.1", 3]
+
+   ];
+
+
+
+    function submitQuiz() {
+
+      let totalScore = 0;
+
+      const answerList = document.getElementById("answers");
+
+      answerList.innerHTML = "";
+
+
+
+      for (let i = 0; i < answers.length; i++) {
+
+        const userAnswer = document.getElementById(`q${i + 1}`).value.trim().split(" ").sort().join(" ");
+
+        const correctAnswer = answers[i].slice(0, -1).sort().join(" ");
+
+        const maxScore = answers[i][answers[i].length - 1];
+
+
+
+        let score;
+
+        if (userAnswer === correctAnswer) {
+
+          score = maxScore;
+
+        } else {
+
+          const userAnswerSet = new Set(userAnswer.split(" "));
+
+          const correctAnswerSet = new Set(correctAnswer.split(" "));
+
+          const intersection = new Set([...userAnswerSet].filter(x => correctAnswerSet.has(x)));
+
+          score = (intersection.size / correctAnswerSet.size) * maxScore;
+
+        }
+
+
+
+        totalScore += score;
+
+
+
+        const listItem = document.createElement("li");
+
+        listItem.textContent = `问题${i + 1}：你的答案是"${userAnswer}"，正确答案是(答案顺序是乱的，不能直接抄哈哈哈）"${correctAnswer}"，得分：${score.toFixed(2)}/${maxScore}`;
+
+        answerList.appendChild(listItem);
+
+      }
+
+
+
+      const scoreDisplay = document.getElementById("score");
+
+      scoreDisplay.textContent = `总分：${totalScore.toFixed(2)}/${answers.reduce((sum, answer) => sum + answer[answer.length - 1], 0)}`;
+
+
+
+      const gradeDisplay = document.getElementById("grade");
+
+      const percentage = (totalScore / answers.reduce((sum, answer) => sum + answer[answer.length - 1], 0)) * 100;
+
+      if (percentage >= 90) {
+
+        gradeDisplay.textContent = "评级：优秀";
+
+      } else if (percentage >= 80) {
+
+        gradeDisplay.textContent = "评级：良好";
+
+      } else if (percentage >= 70) {
+
+        gradeDisplay.textContent = "评级：中等";
+
+      } else if (percentage >= 60) {
+
+        gradeDisplay.textContent = "评级：及格";
+
+      } else {
+
+        gradeDisplay.textContent = "评级：不及格";
+
+      }
+
+
+
+      document.getElementById("result").style.display = "block";
+
+    }
+
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

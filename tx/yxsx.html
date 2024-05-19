@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<html lang="zh">
+
+<head>
+
+
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>圆形扇形计算器</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+
+  <style>
+
+    .card {
+
+      margin-bottom: 20px;
+
+    }
+
+  </style>
+
+</head>
+
+
+   
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+    
+
+  <div class="container">
+
+    <h1 class="text-center my-5">圆形扇形计算器</h1>
+
+    <div class="row justify-content-center">
+
+      <div class="col-md-6">
+
+        <div class="card">
+
+          <div class="card-header">
+
+            <h4>圆形扇形计算器</h4>
+
+          </div>
+
+          <div class="card-body">
+
+            <div class="form-group">
+
+              <label for="radius">半径 (厘米):</label>
+
+              <input type="number" class="form-control" id="radius" placeholder="输入半径">
+
+            </div>
+
+            <button class="btn btn-primary" onclick="calculateCircle()">计算</button>
+
+            <div class="mt-3">
+
+              <p>周长: <span id="circumference"></span> 厘米</p>
+
+              <p>面积: <span id="area"></span> 平方厘米</p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="col-md-6">
+
+        <div class="card">
+
+          <div class="card-header">
+
+            <h4>扇形计算器</h4>
+
+          </div>
+
+          <div class="card-body">
+
+            <div class="form-group">
+
+              <label for="radius">半径 (厘米):</label>
+
+              <input type="number" class="form-control" id="sector-radius" placeholder="输入半径">
+
+            </div>
+
+            <div class="form-group">
+
+              <label for="angle">角度 (度):</label>
+
+              <input type="number" class="form-control" id="angle" placeholder="输入角度">
+
+            </div>
+
+            <button class="btn btn-primary" onclick="calculateSector()">计算</button>
+
+            <div class="mt-3">
+
+              <p>面积: <span id="sector-area"></span> 平方厘米</p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+<script>
+    function loadHeaderContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("header-container").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "https://t.mg-tool.cn/header.php", true);
+        xhr.send();
+    }
+
+    function calculateCircle() {
+
+      const radius = document.getElementById('radius').value;
+
+      const circumference = 2 * Math.PI * radius;
+
+      const area = Math.PI * radius ** 2;
+
+      document.getElementById('circumference').textContent = circumference.toFixed(2);
+
+      document.getElementById('area').textContent = area.toFixed(2);
+
+    }
+
+
+
+    function calculateSector() {
+
+      const radius = document.getElementById('sector-radius').value;
+
+      const angle = document.getElementById('angle').value;
+
+      const area = 0.5 * radius ** 2 * (angle * Math.PI / 180);
+
+      document.getElementById('sector-area').textContent = area.toFixed(2);
+
+    }
+
+  </script>
+
+</body>
+
+</html>

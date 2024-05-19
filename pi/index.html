@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>圆周率查询</title>
+
+  <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+
+  <style>
+
+    .card {
+
+      max-width: 600px;
+
+      margin: 0 auto;
+
+      margin-top: 50px;
+
+    }
+
+  </style>
+
+</head>
+
+
+   
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+    
+
+  <div class="card">
+
+    <div class="card-header">
+
+      圆周率前100万位查询
+
+    </div>
+
+    <div class="card-body">
+
+      <div class="form-group">
+
+        <label for="number">输入数字:</label>
+
+        <input type="text" class="form-control" id="number">
+
+      </div>
+
+      <div class="form-group">
+
+        <label for="startPosition">起始位置:</label>
+
+        <select class="form-control" id="startPosition">
+
+          <option value="3">从个位"3"开始</option>
+
+          <option value="1">从十分位"1"开始</option>
+
+        </select>
+
+      </div>
+
+      <button class="btn btn-primary" onclick="searchPi()">查询</button>
+
+      <div id="result" class="mt-3"></div>
+
+    </div>
+
+  </div>
+
+
+
+<script>
+    function loadHeaderContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("header-container").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "https://t.mg-tool.cn/header.php", true);
+        xhr.send();
+    }
+
+    let pi = "";
+
+
+
+    // 从 pi.txt 文件中读取圆周率的值
+
+    fetch("pi.txt")
+
+      .then(response => response.text())
+
+      .then(data => {
+
+        pi = data;
+
+      })
+
+      .catch(error => console.error(error));
+
+
+
+    function searchPi() {
+
+      const number = document.getElementById("number").value;
+
+      const startPosition = document.getElementById("startPosition").value;
+
+      const index = pi.indexOf(number, startPosition === "3" ? 0 : 1);
+
+      const resultDiv = document.getElementById("result");
+
+
+
+      if (index === -1) {
+
+        resultDiv.innerHTML = `数字 ${number} 不存在于圆周率中。`;
+
+      } else {
+
+        const startIndex = index + (startPosition === "3" ? 1 : 2);
+
+        const endIndex = startIndex + number.length - 1;
+
+        resultDiv.innerHTML = `数字 ${number} 在圆周率的第 ${startIndex} 位到第 ${endIndex} 位出现。`;
+
+      }
+
+    }
+
+  </script>
+
+</body>
+
+</html>

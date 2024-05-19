@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Button Game</title>
+   <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+   <style>
+       body {
+           font-family: Arial;
+           max-width: 800px;
+           margin: 0 auto;
+           padding-top: 50px;
+       }
+       .card {
+           box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+           padding: 20px;
+       }
+       #container {
+           width: 100%;
+           height: 400px;
+           position: relative;
+           overflow: hidden;
+           margin-bottom: 20px;
+       }
+       .button {
+           width: 50px;
+           height: 50px;
+           background-color: #007bff;
+           color: white;
+           display: flex;
+           justify-content: center;
+           align-items: center;
+           border: none;
+           cursor: pointer;
+           position: absolute;
+           animation: moveButton 3.5s linear infinite;
+       }
+       @keyframes moveButton {
+           from {
+               left: 100%;
+           }
+           to {
+               left: 0%;
+           }
+       }
+       #startButton {
+           display: block;
+           margin: 0 auto;
+       }
+       p {
+           text-align: center;
+       }
+   </style>
+</head>
+<body onload="loadHeaderContent()">
+    <div id="header-container"></div>
+   <div class="container">
+       <div class="card">
+           <div id="container"></div>
+           <button id="startButton" class="btn btn-primary" onclick="startGame()">开始</button>
+           <p>游戏玩法：点击开始按钮后，会有一个按钮从右至左运动，我们需要尽量去点击，防止按钮到达最左侧。看谁的分数最高吧！</p>
+           <p>分数: <span id="score">0</span></p>
+       </div>
+   </div>
+
+   <script>
+    function loadHeaderContent() {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("header-container").innerHTML = this.responseText;
+            }
+        };
+        xhr.open("GET", "https://t.mg-tool.cn/header.php", true);
+        xhr.send();
+    }
+       let buttonCount = 0;
+       let score = 0;
+       let buttonElement = null;
+       let container = document.getElementById('container');
+       let startButton = document.getElementById('startButton');
+       let scoreElement = document.getElementById('score');
+       let buttonSpeed = 10;
+       let maxWidth = container.offsetWidth - 50;
+
+       function createButton() {
+           let newButton = document.createElement('button');
+           newButton.innerText = 'mg' + (buttonCount + 1);
+           newButton.style.left = buttonCount * 50 + 'px';
+           newButton.classList.add('button');
+           container.appendChild(newButton);
+           buttonCount++;
+           return newButton;
+       }
+
+       function startGame() {
+           buttonElement = createButton();
+           buttonElement.addEventListener('click', onClick);
+       }
+
+       function onClick() {
+           score++;
+           scoreElement.innerText = score;
+           removeButton();
+           let nextButtonSpeed = Math.min(buttonSpeed + 0.05, 2);
+           buttonElement = createButton();
+           buttonElement.classList.add('button');
+           buttonElement.style.animationDuration = nextButtonSpeed + 's';
+           buttonElement.addEventListener('click', onClick);
+       }
+
+       function removeButton() {
+           container.removeChild(buttonElement);
+       }
+
+       function checkCollision() {
+           if (buttonElement.offsetLeft <= 0) {
+               gameOver();
+           }
+       }
+
+       function gameOver() {
+           alert('游戏结束！');
+           buttonElement.removeEventListener('click', onClick);
+           buttonElement.style.left = maxWidth + 'px';
+       }
+
+       document.addEventListener('click', function() {
+           checkCollision();
+       });
+   </script>
+</body>
+</html>

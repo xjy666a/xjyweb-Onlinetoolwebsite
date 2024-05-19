@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<html>
+<head>
+  <title>性取向测试</title>
+  <link rel="stylesheet" href="https://cdn.staticfile.net/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
+  <style>
+    .card {
+      margin-top: 20px;
+    }
+
+    .option {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .option input[type="radio"] {
+      opacity: 0;
+      position: absolute;
+    }
+
+    .option label {
+      padding-left: 30px;
+      position: relative;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .option label:before {
+      content: "";
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+      position: absolute;
+      left: 0;
+      bottom: 1px;
+      background-color: #e9e9e9;
+      border-radius: 50%;
+    }
+
+    .option input[type="radio"]:checked + label:before {
+      background-color: #007bff;
+    }
+
+    .option label span {
+      white-space: nowrap;
+    }
+
+    @media (max-width: 576px) {
+      .card {
+        margin-left: 15px;
+        margin-right: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="card-body">
+        <h1 class="card-title">性取向测试</h1>
+        <p class="card-text text-danger">该测试不能代替医生诊断。如果你有心理方面问题,请寻求心理医生,该测试仅供参考。</p>
+        <button id="startBtn" class="btn btn-primary">开始测试</button>
+        <div id="testContainer" style="display: none;">
+          <div id="questionNumber" class="mt-3"></div>
+          <div id="question" class="mt-3"></div>
+          <form id="options" class="mt-3">
+            <label class="option">
+              <input type="radio" name="answer" value="4">
+              <span>A: 完全同意</span>
+            </label>
+            <label class="option">
+              <input type="radio" name="answer" value="3">
+              <span>B: 比较同意</span>
+            </label>
+            <label class="option">
+              <input type="radio" name="answer" value="2">
+              <span>C: 中立</span>
+            </label>
+            <label class="option">
+              <input type="radio" name="answer" value="1">
+              <span>D: 比较不同意</span>
+            </label>
+            <label class="option">
+              <input type="radio" name="answer" value="0">
+              <span>E: 完全不同意</span>
+            </label>
+          </form>
+        </div>
+        <div id="result" class="mt-3" style="display: none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="disclaimerModal" tabindex="-1" role="dialog" aria-labelledby="disclaimerModalLabel" aria-hidden="true"></div>
+
+   <script>
+    const questions = [
+      { text: '我对异性有浪漫的吸引力', category: '异性恋' },
+      { text: '我对同性有浪漫的吸引力', category: '同性恋' },
+      { text: '我对两性都有吸引力', category: '双性恋' },
+        { text: '我对异性有浪漫的吸引力', category: '异性恋' },
+  { text: '我对同性有浪漫的吸引力', category: '同性恋' },
+  { text: '我对两性都有吸引力', category: '双性恋' },
+  { text: '我曾经对异性有过性幻想', category: '异性恋' },
+  { text: '我曾经对同性有过性幻想', category: '同性恋' },
+  { text: '我对同性和异性都曾有过性幻想', category: '双性恋' },
+  { text: '我更喜欢和异性约会', category: '异性恋' },
+  { text: '我更喜欢和同性约会', category: '同性恋' },
+  { text: '我对和异性或同性约会都感兴趣', category: '双性恋' },
+  { text: '我最想和异性结婚', category: '异性恋' },
+  { text: '我最想和同性结婚', category: '同性恋' },
+  { text: '我对与异性或同性结婚都持开放态度', category: '双性恋' },
+  { text: '我对异性伴侣更有性吸引力', category: '异性恋' },
+  { text: '我对同性伴侣更有性吸引力', category: '同性恋' },
+  { text: '我对异性和同性伴侣都有性吸引力', category: '双性恋' },
+  { text: '我渴望和异性建立浪漫关系', category: '异性恋' },
+  { text: '我渴望和同性建立浪漫关系', category: '同性恋' },
+  { text: '我曾经与异性发生过亲密关系', category: '异性关系' },
+  { text: '我曾经与同性发生过亲密关系', category: '同性关系' },
+  { text: '我与异性和同性都发生过亲密关系', category: '双性关系' },
+  { text: '我更希望与异性发生亲密关系', category: '异性偏好' },
+  { text: '我更希望与同性发生亲密关系', category: '同性偏好' },
+  { text: '我对与异性或同性发生亲密关系都感兴趣', category: '双性偏好' },
+  { text: '我在性行为中更喜欢扮演传统男性角色', category: '传统男性' },
+  { text: '我在性行为中更喜欢扮演传统女性角色', category: '传统女性' },
+  { text: '我在性行为中不太在意性别角色', category: '角色中立' },
+  { text: '我倾向于主动发起与异性的亲密关系', category: '主动异性' },
+  { text: '我倾向于主动发起与同性的亲密关系', category: '主动同性' },
+  { text: '我不分异性或同性,都会主动发起亲密关系', category: '主动双性' },
+  { text: '我在亲密关系中更喜欢扮演被动角色', category: '被动角色' },
+  { text: '我在亲密关系中更喜欢扮演主动角色', category: '主动角色' },
+  { text: '我在亲密关系中角色分配比较随意', category: '角色随意' },
+  { text: '我有过跟异性从事一些非传统性行为的幻想', category: '异性幻想' },
+  { text: '我有过跟同性从事一些非传统性行为的幻想', category: '同性幻想' }, 
+  { text: '我对尝试一些新奇的性行为感兴趣', category: '开放尝试' },
+  { text: '我更喜欢传统的性行为方式', category: '传统性行为' },
+  { text: '在亲密关系中,我倾向于扮演主导角色', category: '主导角色' },
+  { text: '在亲密关系中,我倾向于扮演被主导角色', category: '被主导角色' },
+  { text: '我对扮演不同角色的性行为感兴趣', category: '角色扮演' },
+  { text: '你喜欢电击的玩法', category: '性虐恋' },
+  { text: '你喜欢捆绑，滴蜡等玩法', category: '性虐恋' },
+  { text: '即使方式可能会让你受伤，你也喜欢', category: '性虐恋' },
+  { text: '即使方式操作不当会让你死亡，但你相信你的伴侣，同时你也喜欢', category: '性虐恋' },
+  { text: '你喜欢非正常性行为（如肛交等）', category: '性虐恋' },
+  { text: '你觉得在私密场所进行性行为最好', category: '隐蔽行为' },
+  { text: '你觉得在公开场所的隐蔽角落进行性行为最好（别人看不到）', category: '隐蔽行为' },
+  { text: '你觉得在公开场所进行明显性行为最好（能让别人看到)', category: '公开行为' },
+  { text: '你喜欢在公开场所露出自己的隐私部位', category: '公开行为' },
+      // 在这里添加其他问题...
+    ];
+
+ let currentQuestion = 0;
+const scores = {
+  '异性恋': 0, 
+  '同性恋': 0,
+  '双性恋': 0,
+  '异性关系': 0,
+  '同性关系': 0, 
+  '双性关系': 0,
+  '异性偏好': 0,
+  '同性偏好': 0,
+  '双性偏好': 0,
+  '传统男性': 0,
+  '传统女性': 0,
+  '角色中立': 0,
+  '主动异性': 0,
+  '主动同性': 0,
+  '主动双性': 0,
+  '被动角色': 0,
+  '主动角色': 0,
+  '角色随意': 0,
+  '异性幻想': 0,
+  '同性幻想': 0,
+  '开放尝试': 0,
+  '传统性行为': 0,
+  '主导角色': 0,
+  '被主导角色': 0,
+  '角色扮演': 0,
+  '开放道具': 0,
+'性虐恋':0,
+'隐蔽行为':0,
+'公开行为':0,
+};
+
+    const startBtn = document.getElementById('startBtn');
+    const testContainer = document.getElementById('testContainer');
+    const questionElement = document.getElementById('question');
+    const questionNumberElement = document.getElementById('questionNumber');
+    const optionsForm = document.getElementById('options');
+    const resultDiv = document.getElementById('result');
+
+    let selectedOption = null;
+
+    startBtn.addEventListener('click', showDisclaimerModal);
+    optionsForm.addEventListener('change', recordAnswer);
+
+    function showDisclaimerModal() {
+  const disclaimerModal = document.getElementById('disclaimerModal');
+  disclaimerModal.innerHTML = `
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="disclaimerModalLabel">免责声明</h5>
+        </div>
+        <div class="modal-body">
+          <!-- 在这里加载xz.html的内容 -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">不同意</button>
+          <button type="button" class="btn btn-primary" id="agreeBtn">同意</button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  fetch('xz.html')
+    .then(response => response.text())
+    .then(html => {
+      const modalBody = disclaimerModal.querySelector('.modal-body');
+      modalBody.innerHTML = html;
+    })
+    .catch(error => {
+      console.error('Error loading xz.html:', error);
+    });
+
+  const agreeBtn = disclaimerModal.querySelector('#agreeBtn');
+  agreeBtn.addEventListener('click', () => {
+    startTest();
+    disclaimerModal.classList.remove('show');
+    disclaimerModal.setAttribute('aria-hidden', 'true');
+    disclaimerModal.style.display = 'none';
+    document.body.classList.remove('modal-open');
+    document.body.style.paddingRight = '0px';
+  });
+
+  disclaimerModal.classList.add('show');
+  disclaimerModal.setAttribute('aria-hidden', 'false');
+  disclaimerModal.style.display = 'block';
+  document.body.classList.add('modal-open');
+  document.body.style.paddingRight = '17px';
+}
+
+    function startTest() {
+      testContainer.style.display = 'block';
+      showQuestion();
+    }
+
+    function showQuestion() {
+      const question = questions[currentQuestion];
+      questionElement.textContent = question.text;
+      questionNumberElement.textContent = `第 ${currentQuestion + 1} 题`;
+      selectedOption = null;
+    }
+
+    function recordAnswer() {
+      const answer = parseInt(optionsForm.answer.value);
+      const question = questions[currentQuestion];
+      scores[question.category] += answer;
+      selectedOption = optionsForm.answer.value;
+      optionsForm.reset();
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        setTimeout(showQuestion, 500);
+      } else {
+        testContainer.style.display = 'none';
+        showResult();
+      }
+    }
+
+    function showResult() {
+      const total = Object.values(scores).reduce((a, b) => a + b, 0);
+      const percentages = {};
+      for (const category in scores) {
+        percentages[category] = (scores[category] / total * 100).toFixed(0);
+      }
+
+      let maxCategory = '';
+      let maxPercentage = 0;
+      for (const category in percentages) {
+        if (percentages[category] > maxPercentage) {
+          maxCategory = category;
+          maxPercentage = percentages[category];
+        }
+      }
+
+      let resultText = `下面是测试结果。（如果你想重新测试，请刷新网页，否则会造成未知错误）<br><br>各项分数占比:<br>`;
+      for (const category in percentages) {
+        resultText += `${category}: ${percentages[category]}%<br>`;
+      }
+
+      resultDiv.innerHTML = resultText;
+      resultDiv.style.display = 'block';
+    }
+
+    const options = document.querySelectorAll('.option input[type="radio"]');
+    options.forEach(option => {
+      option.addEventListener('click', () => {
+        if (selectedOption !== option.value) {
+          selectedOption = option.value;
+          const labels = document.querySelectorAll('.option label');
+          labels.forEach(label => {
+            label.style.color = '';
+          });
+          const selectedLabel = option.nextElementSibling;
+selectedLabel.style.color = 'blue';
+setTimeout(() => {
+  selectedLabel.style.color = '';
+}, 500); // 延迟500毫秒恢复默认颜色
+}
+});
+});
+  </script>
+</body>
+</html>
